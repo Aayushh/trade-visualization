@@ -1,0 +1,46 @@
+# Data files (often large)
+data/raw/
+data/processed/*.parquet
+data/processed/*.csv
+!data/tariff_events_config.csv
+!data/processed/hs10_lookup.*
+
+# R specific
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+*.Rproj
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+*.txt
+
+# Build outputs (keep /docs for GitHub Pages)
+data_exploration/output/interactive/*_files/
+data_exploration/output/static/
+
+# Temporary files
+*.tmp
+*.bak

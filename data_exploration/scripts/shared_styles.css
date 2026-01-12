@@ -1,0 +1,169 @@
+/* ============================================================================
+   SHARED STYLES - US Trade Data Visualization Suite
+   Provides consistent styling and dark mode across all pages
+   ============================================================================ */
+
+/* CSS Variables for theming */
+:root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --bg-tertiary: #f1f5f9;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --text-muted: #94a3b8;
+    --border-color: #e2e8f0;
+    --accent-primary: #667eea;
+    --accent-secondary: #764ba2;
+    --accent-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.07);
+    --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
+    --card-bg: rgba(255,255,255,0.8);
+    --nav-bg: rgba(255,255,255,0.95);
+    --overlay-bg: rgba(0,0,0,0.5);
+}
+
+.dark-mode {
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-tertiary: #334155;
+    --text-primary: #f1f5f9;
+    --text-secondary: #cbd5e1;
+    --text-muted: #94a3b8;
+    --border-color: #475569;
+    --card-bg: rgba(30,41,59,0.9);
+    --nav-bg: rgba(15,23,42,0.95);
+    --overlay-bg: rgba(0,0,0,0.7);
+}
+
+* { box-sizing: border-box; }
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    margin: 0;
+    padding: 0;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Navigation Bar */
+.nav-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    background: var(--nav-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    z-index: 9999;
+    box-shadow: var(--shadow-sm);
+}
+
+.nav-bar .nav-left { display: flex; align-items: center; gap: 12px; }
+.nav-bar .nav-right { display: flex; align-items: center; gap: 8px; }
+
+.nav-bar .home-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: var(--accent-gradient);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.nav-bar .home-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.nav-bar .page-title { font-size: 16px; font-weight: 600; color: var(--text-primary); }
+
+.nav-bar .theme-toggle {
+    padding: 8px 12px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.2s;
+}
+
+.nav-bar .theme-toggle:hover { background: var(--border-color); }
+
+.content-with-nav { padding-top: 70px; }
+
+/* Iframe Modal */
+.iframe-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--overlay-bg);
+    z-index: 10000;
+}
+
+.iframe-modal.active { display: flex; }
+
+.iframe-modal .modal-content {
+    position: relative;
+    width: 95%;
+    height: 92%;
+    margin: auto;
+    background: var(--bg-primary);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+}
+
+.iframe-modal .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.iframe-modal .modal-title { font-size: 16px; font-weight: 600; color: var(--text-primary); }
+
+.iframe-modal .close-btn {
+    padding: 8px 16px;
+    background: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.iframe-modal .close-btn:hover { background: #dc2626; }
+
+.iframe-modal iframe { width: 100%; height: calc(100% - 52px); border: none; }
+
+/* Card effects */
+.viz-card { cursor: pointer; transition: transform 0.3s, box-shadow 0.3s; }
+.viz-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+
+/* Dark mode Plotly support */
+.dark-mode .js-plotly-plot .plotly .bg { fill: var(--bg-secondary) !important; }
+.dark-mode .js-plotly-plot text { fill: var(--text-primary) !important; }
+
+/* Utilities */
+.hidden { display: none !important; }
