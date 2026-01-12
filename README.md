@@ -2,7 +2,7 @@
 
 A comprehensive R-based analytics platform analyzing US trade data and tariff impacts across multiple dimensions: products, countries, time periods, and geographic relationships.
 
-**Live Site:** https://[YOUR_USERNAME].github.io/trade-visualizations/
+**Live Site:** https://Aayushh.github.io/trade-visualization/
 
 ---
 
@@ -98,7 +98,7 @@ trade_dashboards/
 ## 🚀 Quick Start
 
 ### View Live Dashboard
-Visit: [https://YOUR_USERNAME.github.io/trade-visualizations/](https://YOUR_USERNAME.github.io/trade-visualizations/)
+Visit: [https://Aayushh.github.io/trade-visualization/](https://Aayushh.github.io/trade-visualization/)
 
 ### For Local Development
 
@@ -114,7 +114,7 @@ Visit: [https://YOUR_USERNAME.github.io/trade-visualizations/](https://YOUR_USER
 #### Setup
 ```bash
 # Clone repository
-git clone https://github.com/YOUR_USERNAME/trade-visualizations.git
+git clone https://github.com/Aayushh/trade-visualization.git
 cd trade_dashboards
 
 # Install R dependencies (in R console)
