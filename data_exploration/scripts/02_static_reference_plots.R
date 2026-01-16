@@ -5,7 +5,7 @@ options(stringsAsFactors = FALSE)
 
 # Load packages
 if (!require("pacman")) install.packages("pacman")
-pacman::p_load(tidyverse, here, scales, patchwork, glue, data.table, showtext)
+pacman::p_load(tidyverse, here, scales, patchwork, glue, data.table, showtext, lubridate, arrow)
 
 message("════════════════════════════════════════════════════════════════")
 message("  ENHANCED STATIC REFERENCE PLOTS")
@@ -68,7 +68,7 @@ theme_premium <- function(base_size = 12) {
       axis.title = element_text(
         size = rel(0.9),
         color = colors$text_dark,
-        face = "medium"
+        face = "plain"
       ),
       axis.text = element_text(
         size = rel(0.85),
@@ -106,7 +106,20 @@ hs10 <- arrow::read_parquet(here("data", "processed", "top_entities_hs10.parquet
 countries <- arrow::read_parquet(here("data", "processed", "top_entities_countries.parquet"))
 chapters <- arrow::read_parquet(here("data", "processed", "top_entities_chapters.parquet"))
 top_entities <- list(hs10 = hs10, countries = countries, chapters = chapters)
-trump_events <- arrow::read_parquet(here("data", "processed", "trump_tariff_events.parquet"))
+
+# Load centralized tariff events config
+trump_events <- fread(here("data", "tariff_events_config.csv"), header = FALSE, fill = TRUE)
+data.table::setnames(trump_events, c("date", "event_name", "event_type", "description", paste0("extra", 5:13)))
+trump_events <- trump_events[date != "date" & !is.na(date) & date != "", .(date, event_name, event_type, description)]
+trump_events[, date := lubridate::dmy(date)]
+trump_events[, category := fcase(
+  grepl("China", event_name, ignore.case = TRUE), "China",
+  grepl("Mexico|Canada", event_name, ignore.case = TRUE), "Mexico-Canada",
+  grepl("Steel|Alum", event_name, ignore.case = TRUE), "Steel-Aluminum",
+  grepl("India", event_name, ignore.case = TRUE), "India",
+  grepl("Vietnam|Indonesia|Korea|Brazil", event_name, ignore.case = TRUE), "Bilateral",
+  default = "Global"
+)]
 
 setDT(monthly_totals)
 setDT(trump_events)
@@ -120,11 +133,8 @@ message("Generating Plot 1: Monthly US Imports (Enhanced)...\n")
 # Convert trade value to billions
 monthly_totals[, trade_value_bn := trade_value / 1e9]
 
-# Create event lines data (filter to major events for clarity)
-major_events <- trump_events[category %in% c(
-  "China", "Mexico-Canada", "Steel-Aluminum",
-  "Global", "Biden"
-)]
+# Create event lines data (select major events for clarity)
+major_events <- trump_events[!grepl("Deal|Agreement", event_type)][1:8]  # First 8 major tariff changes
 
 # Calculate statistics for annotation
 avg_imports <- mean(monthly_totals$trade_value_bn, na.rm = TRUE)
@@ -138,6 +148,12 @@ p1 <- ggplot(monthly_totals, aes(x = date, y = trade_value_bn)) +
   geom_vline(
     data = major_events, aes(xintercept = date, color = category),
     linetype = "dashed", alpha = 0.7, linewidth = 0.6
+  ) +
+  # Event labels
+  geom_text(
+    data = major_events,
+    aes(x = date, y = max_imports * 0.95, label = substr(event_name, 1, 15), color = category),
+    angle = 90, hjust = 1, vjust = -0.3, size = 2.5, fontface = "bold", alpha = 0.8
   ) +
   # Average line
   geom_hline(

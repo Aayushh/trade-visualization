@@ -279,12 +279,13 @@ for (i in seq_len(nrow(top_chapters_list))) {
   )
 }
 
-# Add event shapes with category colors
+# Add event shapes with category colors AND annotations with hover text
 event_shapes <- list()
 event_annotations <- list()
 for (i in seq_len(nrow(trump_events))) {
   d <- trump_events$date[i]
   cat_val <- as.character(trump_events$category[i])
+  event_name_val <- as.character(trump_events$event_name[i])
 
   # Handle NULL, NA, or empty category
   if (is.null(cat_val) || is.na(cat_val) || cat_val == "" || length(cat_val) == 0) {
@@ -299,6 +300,20 @@ for (i in seq_len(nrow(trump_events))) {
     type = "line", xref = "x", yref = "paper",
     x0 = d, x1 = d, y0 = 0, y1 = 1,
     line = list(color = event_color, width = 2, dash = "dash")
+  )))
+  
+  # Add annotation with hover capability
+  event_annotations <- append(event_annotations, list(list(
+    x = d, y = 1, yref = "paper",
+    text = paste0("<b>", event_name_val, "</b>"),
+    showarrow = FALSE,
+    textangle = -90,
+    xanchor = "left",
+    yanchor = "bottom",
+    font = list(size = 9, color = event_color),
+    opacity = 0.7,
+    hovertext = paste0(event_name_val, "<br>", format(d, "%b %d, %Y")),
+    hoverlabel = list(bgcolor = "white", bordercolor = event_color)
   )))
 }
 
@@ -318,6 +333,7 @@ p1 <- p1_base %>%
     height = 700,
     margin = list(l = 80, r = 80, t = 140, b = 80),
     shapes = event_shapes,
+    annotations = event_annotations,
     updatemenus = list(
       list(
         type = "dropdown",
@@ -395,13 +411,8 @@ p2 <- plot_ly(monthly_totals, x = ~date, type = "scatter", mode = "lines+markers
     height = 650,
     margin = list(l = 80, r = 80, t = 100, b = 80),
     legend = list(orientation = "h", y = -0.15, x = 0.5, xanchor = "center"),
-    shapes = lapply(seq_len(nrow(trump_events)), function(i) {
-      list(
-        type = "line", xref = "x", yref = "paper",
-        x0 = trump_events$date[i], x1 = trump_events$date[i], y0 = 0, y1 = 1,
-        line = list(color = "#9ca3af", width = 1.5, dash = "dot")
-      )
-    })
+    shapes = event_shapes,
+    annotations = event_annotations
   ) %>%
   config(responsive = TRUE, displaylogo = FALSE)
 
@@ -525,13 +536,8 @@ p4 <- p4 %>%
     height = 750,
     margin = list(l = 80, r = 160, t = 100, b = 80),
     legend = list(x = 1.02, y = 1, bgcolor = "rgba(255,255,255,0.9)", bordercolor = colors$grid, borderwidth = 1),
-    shapes = lapply(seq_len(nrow(trump_events)), function(i) {
-      list(
-        type = "line", xref = "x", yref = "paper",
-        x0 = trump_events$date[i], x1 = trump_events$date[i], y0 = 0, y1 = 1,
-        line = list(color = "#e5e7eb", width = 1.5, dash = "dot")
-      )
-    })
+    shapes = event_shapes,
+    annotations = event_annotations
   ) %>%
   config(responsive = TRUE, displaylogo = FALSE)
 
@@ -591,7 +597,9 @@ p5 <- plot_ly() %>%
     hovermode = "x unified",
     height = 700,
     margin = list(l = 80, r = 80, t = 100, b = 80),
-    legend = list(orientation = "v", x = 1.02, y = 1, bgcolor = "rgba(255,255,255,0.9)")
+    legend = list(orientation = "v", x = 1.02, y = 1, bgcolor = "rgba(255,255,255,0.9)"),
+    shapes = event_shapes,
+    annotations = event_annotations
   )
 
 # Use a refined color palette
