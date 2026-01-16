@@ -61,8 +61,10 @@
         .search-input:focus { outline: none; border-color: var(--accent-primary); }
 
         .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1.5rem; }
-        .card { background: var(--bg-card); backdrop-filter: blur(20px); border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); transition: all 0.3s; border: 1px solid var(--border-color); }
-        .card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+        .card { background: var(--bg-card); backdrop-filter: blur(20px); border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); border: 1px solid var(--border-color); position: relative; }
+        .card:hover { transform: translateY(-8px) scale(1.02); box-shadow: var(--shadow-hover); border-color: var(--accent-primary); }
+        .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary)); opacity: 0; transition: opacity 0.3s; }
+        .card:hover::before { opacity: 1; }
         .card.hidden { display: none; }
         .card-header { padding: 0.75rem 1.25rem; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
         .card[data-category="static"] .card-header { background: linear-gradient(135deg, var(--cat-static), #059669); color: white; }
@@ -71,16 +73,20 @@
         .card[data-category="geographic"] .card-header { background: linear-gradient(135deg, var(--cat-geographic), #b91c1c); color: white; }
         .card[data-category="animations"] .card-header { background: linear-gradient(135deg, var(--cat-animations), #7c3aed); color: white; }
         .card[data-category="tools"] .card-header { background: linear-gradient(135deg, var(--cat-tools), #0891b2); color: white; }
-        .card-thumbnail { height: 80px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; background: var(--bg-glass); }
+        .card-thumbnail { height: 100px; display: flex; align-items: center; justify-content: center; font-size: 3rem; background: linear-gradient(135deg, var(--bg-glass), rgba(102, 126, 234, 0.1)); transition: all 0.3s; }
+        .card:hover .card-thumbnail { background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.15)); transform: scale(1.1); }
         .card-content { padding: 1.25rem; }
-        .card-title { font-size: 1.1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem; }
+        .card-title { font-size: 1.1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem; transition: color 0.3s; }
+        .card:hover .card-title { color: var(--accent-primary); }
         .card-subtitle { font-size: 0.85rem; color: var(--accent-primary); margin-bottom: 0.75rem; }
         .card-description { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 0.75rem; }
         .card-insight { font-size: 0.85rem; color: var(--text-muted); font-style: italic; margin-bottom: 1rem; padding: 0.75rem; background: var(--bg-glass); border-radius: 8px; }
         .card-footer { display: flex; justify-content: space-between; align-items: center; }
         .card-badge { padding: 0.25rem 0.75rem; background: var(--bg-glass); border-radius: 20px; font-size: 0.75rem; color: var(--text-muted); }
-        .card-link { padding: 0.5rem 1rem; background: var(--accent-primary); color: white; text-decoration: none; border-radius: 8px; font-size: 0.85rem; font-weight: 500; transition: all 0.3s; }
-        .card-link:hover { background: var(--accent-secondary); }
+        .card-link { padding: 0.5rem 1rem; background: var(--accent-primary); color: white; text-decoration: none; border-radius: 8px; font-size: 0.85rem; font-weight: 500; transition: all 0.3s; position: relative; overflow: hidden; }
+        .card-link::before { content: ''; position: absolute; top: 50%; left: 50%; width: 0; height: 0; border-radius: 50%; background: rgba(255,255,255,0.3); transform: translate(-50%, -50%); transition: width 0.6s, height 0.6s; }
+        .card-link:hover::before { width: 300px; height: 300px; }
+        .card-link:hover { background: var(--accent-secondary); transform: scale(1.05); box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4); }
 
         footer { background: var(--bg-secondary); backdrop-filter: blur(20px); border-radius: 24px; padding: 2rem; margin-top: 2rem; text-align: center; }
         .footer-title { font-size: 1.25rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem; }
@@ -90,7 +96,8 @@
         /* Modal */
         .viz-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10000; }
         .viz-modal.active { display: flex; }
-        .viz-modal .modal-content { width: 95%; height: 95%; margin: auto; background: #1e1e2e; border-radius: 16px; overflow: hidden; }
+        .viz-modal .modal-content { width: 95%; height: 95%; margin: auto; background: #1e1e2e; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.5); animation: modalSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        @keyframes modalSlideIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         .viz-modal .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 24px; background: #2d2d4a; }
         .viz-modal .modal-title { font-size: 18px; font-weight: 600; color: white; }
         .viz-modal .close-btn { padding: 10px 20px; background: #ef4444; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
@@ -149,7 +156,7 @@
                     <div class="card-insight">TIP: Import values show seasonal patterns with notable disruptions following major tariff announcements.</div>
                     <div class="card-footer">
                         <span class="card-badge">Time Series</span>
-                        <a href="#" class="card-link" onclick="openInModal('../static/monthly_imports.png', 'Monthly US Imports', true); return false;">Open</a>
+                        <a href="#" class="card-link" onclick="openInModal('./static/monthly_imports.png', 'Monthly US Imports', true); return false;" title="View full-size static chart">Open</a>
                     </div>
                 </div>
             </div>
@@ -163,7 +170,7 @@
                     <div class="card-insight">TIP: Electronics (Chapter 85) and machinery (Chapter 84) dominate US imports by value.</div>
                     <div class="card-footer">
                         <span class="card-badge">Bar Chart</span>
-                        <a href="#" class="card-link" onclick="openInModal('../static/top_chapters.png', 'Top 30 HS Chapters', true); return false;">Open</a>
+                        <a href="#" class="card-link" onclick="openInModal('./static/top_chapters.png', 'Top 30 HS Chapters', true); return false;" title="View full-size static chart">Open</a>
                     </div>
                 </div>
             </div>
@@ -177,7 +184,7 @@
                     <div class="card-insight">TIP: China remains the largest source of US imports despite elevated tariff rates.</div>
                     <div class="card-footer">
                         <span class="card-badge">Bar Chart</span>
-                        <a href="#" class="card-link" onclick="openInModal('../static/top_countries.png', 'Top 30 Countries', true); return false;">Open</a>
+                        <a href="#" class="card-link" onclick="openInModal('./static/top_countries.png', 'Top 30 Countries', true); return false;" title="View full-size static chart">Open</a>
                     </div>
                 </div>
             </div>
@@ -191,7 +198,7 @@
                     <div class="card-insight">TIP: Toggle between aggregate view and individual country/chapter trends to identify patterns.</div>
                     <div class="card-footer">
                         <span class="card-badge">Interactive Line Chart</span>
-                        <a href="#" class="card-link" onclick="openInModal('01_monthly_imports_interactive.html', 'Monthly Imports Interactive', false); return false;">Open</a>
+                        <a href="#" class="card-link" onclick="openInModal('01_monthly_imports_interactive.html', 'Monthly Imports Interactive', false); return false;" title="Open interactive Monthly Imports Interactive visualization">Open</a>
                     </div>
                 </div>
             </div>
@@ -205,7 +212,7 @@
                     <div class="card-insight">TIP: Section 61 and 69 rates show step increases aligned with tariff implementation dates.</div>
                     <div class="card-footer">
                         <span class="card-badge">Line Chart</span>
-                        <a href="#" class="card-link" onclick="openInModal('02_tariff_evolution_interactive.html', 'Tariff Rate Evolution', false); return false;">Open</a>
+                        <a href="#" class="card-link" onclick="openInModal('02_tariff_evolution_interactive.html', 'Tariff Rate Evolution', false); return false;" title="Open interactive Tariff Rate Evolution visualization">Open</a>
                     </div>
                 </div>
             </div>
@@ -219,7 +226,7 @@
                     <div class="card-insight">TIP: Larger bubbles indicate months with higher tariff revenue collection.</div>
                     <div class="card-footer">
                         <span class="card-badge">Bubble Chart</span>
-                        <a href="#" class="card-link" onclick="openInModal('03_trade_vs_tariff_scatter.html', 'Trade vs Tariff Scatter', false); return false;">Open</a>
+                        <a href="#" class="card-link" onclick="openInModal('03_trade_vs_tariff_scatter.html', 'Trade vs Tariff Scatter', false); return false;" title="Open interactive Trade vs Tariff Scatter visualization">Open</a>
                     </div>
                 </div>
             </div>
@@ -233,7 +240,7 @@
                     <div class="card-insight">TIP: Watch how China's import share changes relative to other major partners.</div>
                     <div class="card-footer">
                         <span class="card-badge">Multi-Line Chart</span>
-                        <a href="#" class="card-link" onclick="openInModal('04_countries_evolution.html', 'Countries Evolution', false); return false;">Open</a>
+                        <a href="#" class="card-link" onclick="openInModal('04_countries_evolution.html', 'Countries Evolution', false); return false;" title="Open interactive Countries Evolution visualization">Open</a>
                     </div>
                 </div>
             </div>
@@ -247,7 +254,7 @@
                     <div class="card-insight">TIP: Market share shifts reveal which sectors gained or lost ground during the tariff period.</div>
                     <div class="card-footer">
                         <span class="card-badge">Stacked Area</span>
-                        <a href="#" class="card-link" onclick="openInModal('05_chapters_stacked_area.html', 'HS Chapters Stacked Area', false); return false;">Open</a>
+                        <a href="#" class="card-link" onclick="openInModal('05_chapters_stacked_area.html', 'HS Chapters Stacked Area', false); return false;" title="Open interactive HS Chapters Stacked Area visualization">Open</a>
                     </div>
                 </div>
             </div>
@@ -261,7 +268,7 @@
                     <div class="card-insight">TIP: Identify high-value products with unusual tariff rates by exploring outliers.</div>
                     <div class="card-footer">
                         <span class="card-badge">Scatter Plot</span>
-                        <a href="#" class="card-link" onclick="openInModal('06_trade_tariff_scatter.html', 'Trade-Tariff Scatter', false); return false;">Open</a>
+                        <a href="#" class="card-link" onclick="openInModal('06_trade_tariff_scatter.html', 'Trade-Tariff Scatter', false); return false;" title="Open interactive Trade-Tariff Scatter visualization">Open</a>
                     </div>
                 </div>
             </div>
@@ -275,7 +282,7 @@
                     <div class="card-insight">TIP: Use the search box to find specific products.</div>
                     <div class="card-footer">
                         <span class="card-badge">Data Table</span>
-                        <a href="#" class="card-link" onclick="openInModal('07_top_products_table.html', 'Top Products Table', false); return false;">Open</a>
+                        <a href="#" class="card-link" onclick="openInModal('07_top_products_table.html', 'Top Products Table', false); return false;" title="Open interactive Top Products Table visualization">Open</a>
                     </div>
                 </div>
             </div>
@@ -289,7 +296,7 @@
                     <div class="card-insight">TIP: A steep curve indicates high concentration - few products account for most trade.</div>
                     <div class="card-footer">
                         <span class="card-badge">Lorenz Curve</span>
-                        <a href="#" class="card-link" onclick="openInModal('08_concentration_lorenz.html', 'Trade Concentration Lorenz', false); return false;">Open</a>
+                        <a href="#" class="card-link" onclick="openInModal('08_concentration_lorenz.html', 'Trade Concentration Lorenz', false); return false;" title="Open interactive Trade Concentration Lorenz visualization">Open</a>
                     </div>
                 </div>
             </div>
@@ -303,7 +310,7 @@
                     <div class="card-insight">TIP: Wide violins indicate high tariff variability within a chapter.</div>
                     <div class="card-footer">
                         <span class="card-badge">Violin Plot</span>
-                        <a href="#" class="card-link" onclick="openInModal('09_tariff_distribution_violin.html', 'Tariff Distribution Violin', false); return false;">Open</a>
+                        <a href="#" class="card-link" onclick="openInModal('09_tariff_distribution_violin.html', 'Tariff Distribution Violin', false); return false;" title="Open interactive Tariff Distribution Violin visualization">Open</a>
                     </div>
                 </div>
             </div>
@@ -317,7 +324,7 @@
                     <div class="card-insight">TIP: Explore the hierarchical structure of trade by clicking into chapters.</div>
                     <div class="card-footer">
                         <span class="card-badge">Treemap</span>
-                        <a href="#" class="card-link" onclick="openInModal('14_hs10_treemap.html', 'HS10 Product Treemap', false); return false;">Open</a>
+                        <a href="#" class="card-link" onclick="openInModal('14_hs10_treemap.html', 'HS10 Product Treemap', false); return false;" title="Open interactive HS10 Product Treemap visualization">Open</a>
                     </div>
                 </div>
             </div>
@@ -331,7 +338,7 @@
                     <div class="card-insight">TIP: Explore whether distance correlates with tariff treatment or trade volume.</div>
                     <div class="card-footer">
                         <span class="card-badge">Bubble Chart</span>
-                        <a href="#" class="card-link" onclick="openInModal('10_country_dashboard.html', 'Country Dashboard', false); return false;">Open</a>
+                        <a href="#" class="card-link" onclick="openInModal('10_country_dashboard.html', 'Country Dashboard', false); return false;" title="Open interactive Country Dashboard visualization">Open</a>
                     </div>
                 </div>
             </div>
@@ -345,7 +352,7 @@
                     <div class="card-insight">TIP: Test whether geographic proximity affects tariff treatment.</div>
                     <div class="card-footer">
                         <span class="card-badge">Box Plot</span>
-                        <a href="#" class="card-link" onclick="openInModal('11_distance_effect.html', 'Distance Effect Analysis', false); return false;">Open</a>
+                        <a href="#" class="card-link" onclick="openInModal('11_distance_effect.html', 'Distance Effect Analysis', false); return false;" title="Open interactive Distance Effect Analysis visualization">Open</a>
                     </div>
                 </div>
             </div>
@@ -359,7 +366,7 @@
                     <div class="card-insight">TIP: Visual patterns reveal whether trade disruptions affected multiple countries simultaneously.</div>
                     <div class="card-footer">
                         <span class="card-badge">Heatmap</span>
-                        <a href="#" class="card-link" onclick="openInModal('12_countries_heatmap.html', 'Countries Heatmap', false); return false;">Open</a>
+                        <a href="#" class="card-link" onclick="openInModal('12_countries_heatmap.html', 'Countries Heatmap', false); return false;" title="Open interactive Countries Heatmap visualization">Open</a>
                     </div>
                 </div>
             </div>
@@ -373,7 +380,7 @@
                     <div class="card-insight">TIP: Some countries have consistent tariff rates while others show high variability.</div>
                     <div class="card-footer">
                         <span class="card-badge">Histogram</span>
-                        <a href="#" class="card-link" onclick="openInModal('13_tariff_distribution_by_country.html', 'Tariff by Country Origin', false); return false;">Open</a>
+                        <a href="#" class="card-link" onclick="openInModal('13_tariff_distribution_by_country.html', 'Tariff by Country Origin', false); return false;" title="Open interactive Tariff by Country Origin visualization">Open</a>
                     </div>
                 </div>
             </div>
@@ -387,7 +394,7 @@
                     <div class="card-insight">TIP: Watch products accumulate trade volume over time.</div>
                     <div class="card-footer">
                         <span class="card-badge">Animated Scatter</span>
-                        <a href="#" class="card-link" onclick="openInModal('15_trade_tariff_animation.html', 'Trade-Tariff Animation', false); return false;">Open</a>
+                        <a href="#" class="card-link" onclick="openInModal('15_trade_tariff_animation.html', 'Trade-Tariff Animation', false); return false;" title="Open interactive Trade-Tariff Animation visualization">Open</a>
                     </div>
                 </div>
             </div>
@@ -401,7 +408,7 @@
                     <div class="card-insight">TIP: Observe how tariff rates spike for specific countries following tariff announcements.</div>
                     <div class="card-footer">
                         <span class="card-badge">Animated Scatter</span>
-                        <a href="#" class="card-link" onclick="openInModal('16_country_evolution_animation.html', 'Country Evolution Animation', false); return false;">Open</a>
+                        <a href="#" class="card-link" onclick="openInModal('16_country_evolution_animation.html', 'Country Evolution Animation', false); return false;" title="Open interactive Country Evolution Animation visualization">Open</a>
                     </div>
                 </div>
             </div>
@@ -415,7 +422,7 @@
                     <div class="card-insight">TIP: Use this tool to understand product classifications and find specific HS codes.</div>
                     <div class="card-footer">
                         <span class="card-badge">Interactive Tool</span>
-                        <a href="#" class="card-link" onclick="openInModal('17_hs_code_lookup.html', 'HS Code Lookup', false); return false;">Open</a>
+                        <a href="#" class="card-link" onclick="openInModal('17_hs_code_lookup.html', 'HS Code Lookup', false); return false;" title="Open interactive HS Code Lookup visualization">Open</a>
                     </div>
                 </div>
             </div>
@@ -425,7 +432,7 @@
             <div class="footer-title">US Trade Data Analysis</div>
             <div class="footer-subtitle">Interactive Visualization Suite</div>
             <div class="footer-meta">
-                <span>Generated: January 12, 2026</span>
+                <span>Generated: January 16, 2026</span>
                 <span>Data: USITC</span>
                 <span>Visualizations: R (plotly, ggplot2)</span>
             </div>
