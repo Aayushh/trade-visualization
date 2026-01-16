@@ -30,8 +30,11 @@ setDT(monthly_by_chapter)
 setDT(hs_lookup)
 
 # Load centralized tariff events config
-trump_events <- fread(here("data", "tariff_events_config.csv"))
-trump_events[, date := as.Date(date)]
+trump_events <- fread(here("data", "tariff_events_config.csv"), header = FALSE, fill = TRUE)
+data.table::setnames(trump_events, c("date", "event_name", "event_type", "description", paste0("extra", 5:13)))
+trump_events <- trump_events[date != "date" & !is.na(date) & date != "", .(date, event_name, event_type, description)]
+# Parse dates from DD-MM-YYYY format in CSV
+trump_events[, date := lubridate::dmy(date)]
 setDT(trump_events)
 
 # ============================================================================

@@ -117,24 +117,29 @@ create_description_panel <- function(title, what_it_shows, how_to_use, key_insig
 
 # Load prepared data
 message("Loading prepared data...\n")
-monthly_totals <- arrow::read_parquet(here("data", "processed", "monthly_totals.parquet"))
-monthly_by_hs6 <- arrow::read_parquet(here("data", "processed", "monthly_by_hs6.parquet"))
-monthly_by_hs10 <- arrow::read_parquet(here("data", "processed", "monthly_by_hs10.parquet"))
-monthly_by_chapter <- arrow::read_parquet(here("data", "processed", "monthly_by_chapter.parquet"))
-monthly_by_country <- arrow::read_parquet(here("data", "processed", "monthly_by_country.parquet"))
-hs_lookup <- arrow::read_parquet(here("data", "processed", "hs_lookup.parquet"))
+monthly_totals <- arrow::read_parquet(here("data", "processed", "monthly_totals.parquet")); message("Loaded monthly_totals")
+monthly_by_hs6 <- arrow::read_parquet(here("data", "processed", "monthly_by_hs6.parquet")); message("Loaded monthly_by_hs6")
+monthly_by_hs10 <- arrow::read_parquet(here("data", "processed", "monthly_by_hs10.parquet")); message("Loaded monthly_by_hs10")
+monthly_by_chapter <- arrow::read_parquet(here("data", "processed", "monthly_by_chapter.parquet")); message("Loaded monthly_by_chapter")
+monthly_by_country <- arrow::read_parquet(here("data", "processed", "monthly_by_country.parquet")); message("Loaded monthly_by_country")
+hs_lookup <- arrow::read_parquet(here("data", "processed", "hs_lookup.parquet")); message("Loaded hs_lookup")
 
 # Load centralized tariff events config
-trump_events <- fread(here("data", "tariff_events_config.csv"))
-trump_events[, date := as.Date(date)]
+trump_events <- fread(here("data", "tariff_events_config.csv"), header = FALSE, fill = TRUE)
+setnames(trump_events, c("date", "event_name", "event_type", "description", paste0("extra", 5:13)))
+# Drop header row and empty rows, keep required columns
+trump_events <- trump_events[date != "date" & !is.na(date) & date != "", .(date, event_name, event_type, description)]
+# Parse dates from DD-MM-YYYY format in CSV
+trump_events[, date := lubridate::dmy(date)]
 
-setDT(monthly_totals)
-setDT(monthly_by_hs6)
-setDT(monthly_by_hs10)
-setDT(monthly_by_chapter)
-setDT(monthly_by_country)
-setDT(trump_events)
-setDT(hs_lookup)
+message("Converting to data.table...")
+setDT(monthly_totals); message("  setDT monthly_totals")
+setDT(monthly_by_hs6); message("  setDT monthly_by_hs6")
+setDT(monthly_by_hs10); message("  setDT monthly_by_hs10")
+setDT(monthly_by_chapter); message("  setDT monthly_by_chapter")
+setDT(monthly_by_country); message("  setDT monthly_by_country")
+setDT(trump_events); message("  setDT trump_events")
+setDT(hs_lookup); message("  setDT hs_lookup")
 
 # ============================================================================
 # EXPLORER 1: MONTHLY IMPORTS WITH TRUMP EVENT MARKERS & FILTERING
