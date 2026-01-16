@@ -17,21 +17,21 @@ viz_cards <- list(
         subtitle = "Time Series with Event Markers",
         description = "Publication-ready time series showing total US imports from January 2024 to August 2025. Vertical dashed lines mark major Trump-era tariff implementation dates.",
         insights = "Import values show seasonal patterns with notable disruptions following major tariff announcements.",
-        chart_type = "Time Series", link = "../static/monthly_imports.png", link_type = "image"
+        chart_type = "Time Series", link = "./static/monthly_imports.png", link_type = "image"
     ),
     list(
         id = "static-2", category = "static", num = "S2", icon = "[S]", title = "Top 30 HS Chapters",
         subtitle = "Trade Volume by Category",
         description = "Horizontal bar chart ranking the top 30 HS chapters by total import value. Bar colors indicate average tariff rate.",
         insights = "Electronics (Chapter 85) and machinery (Chapter 84) dominate US imports by value.",
-        chart_type = "Bar Chart", link = "../static/top_chapters.png", link_type = "image"
+        chart_type = "Bar Chart", link = "./static/top_chapters.png", link_type = "image"
     ),
     list(
         id = "static-3", category = "static", num = "S3", icon = "[S]", title = "Top 30 Countries",
         subtitle = "Trade Partners by Value",
         description = "Horizontal bar chart of the 30 largest US import partners by total trade value.",
         insights = "China remains the largest source of US imports despite elevated tariff rates.",
-        chart_type = "Bar Chart", link = "../static/top_countries.png", link_type = "image"
+        chart_type = "Bar Chart", link = "./static/top_countries.png", link_type = "image"
     ),
 
     # Time Series
