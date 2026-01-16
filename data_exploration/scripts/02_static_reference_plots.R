@@ -32,30 +32,33 @@ colors <- list(
   grid = "#e2e8f0"
 )
 
-# Event colors for tariff categories
+# Event colors for tariff categories - highly distinct colors
 event_colors <- c(
-  "China" = "#ef4444",
-  "Mexico-Canada" = "#f59e0b",
-  "Steel-Aluminum" = "#10b981",
-  "Global" = "#8b5cf6",
-  "Biden" = "#6366f1"
+  "China" = "#dc2626",
+  "Mexico-Canada" = "#ea580c",
+  "Steel-Aluminum" = "#0ea5e9",
+  "Bilateral" = "#7c3aed",
+  "Global" = "#059669",
+  "India" = "#d97706"
 )
 
 # Premium ggplot2 theme
-theme_premium <- function(base_size = 12) {
+theme_premium <- function(base_size = 14) {
   theme_minimal(base_size = base_size, base_family = "Inter") +
     theme(
       # Title and subtitle
       plot.title = element_text(
         face = "bold",
-        size = rel(1.3),
+        size = rel(2.2),
         color = colors$text_dark,
-        margin = margin(b = 8)
+        margin = margin(b = 12),
+        hjust = 0
       ),
       plot.subtitle = element_text(
-        size = rel(0.95),
+        size = rel(1.2),
         color = colors$text_muted,
-        margin = margin(b = 15)
+        margin = margin(b = 20),
+        hjust = 0
       ),
       plot.caption = element_text(
         size = rel(0.75),
@@ -116,8 +119,9 @@ trump_events[, category := fcase(
   grepl("China", event_name, ignore.case = TRUE), "China",
   grepl("Mexico|Canada", event_name, ignore.case = TRUE), "Mexico-Canada",
   grepl("Steel|Alum", event_name, ignore.case = TRUE), "Steel-Aluminum",
-  grepl("India", event_name, ignore.case = TRUE), "India",
   grepl("Vietnam|Indonesia|Korea|Brazil", event_name, ignore.case = TRUE), "Bilateral",
+  grepl("Global|Baseline|Auto", event_name, ignore.case = TRUE), "Global",
+  grepl("India", event_name, ignore.case = TRUE), "India",
   default = "Global"
 )]
 
@@ -144,16 +148,27 @@ max_date <- monthly_totals$date[which.max(monthly_totals$trade_value_bn)]
 p1 <- ggplot(monthly_totals, aes(x = date, y = trade_value_bn)) +
   # Shaded area under curve
   geom_area(fill = colors$primary, alpha = 0.15) +
-  # Event markers (vertical lines)
+  # Event markers (vertical lines with different styles)
   geom_vline(
-    data = major_events, aes(xintercept = date, color = category),
-    linetype = "dashed", alpha = 0.7, linewidth = 0.6
+    data = major_events, aes(xintercept = date, color = category, linetype = category),
+    alpha = 0.75, linewidth = 0.85
   ) +
-  # Event labels
+  # Event labels with improved readability
   geom_text(
     data = major_events,
-    aes(x = date, y = max_imports * 0.95, label = substr(event_name, 1, 15), color = category),
-    angle = 90, hjust = 1, vjust = -0.3, size = 2.5, fontface = "bold", alpha = 0.8
+    aes(x = date, y = max_imports * 0.93, label = substr(event_name, 1, 16), color = category),
+    angle = 90, hjust = 1, vjust = 0.2, size = 3.2, fontface = "bold", alpha = 0.85
+  ) +
+  scale_linetype_manual(
+    values = c(
+      "China" = "dashed",
+      "Mexico-Canada" = "dotdash",
+      "Steel-Aluminum" = "solid",
+      "Bilateral" = "twodash",
+      "Global" = "longdash",
+      "India" = "dotted"
+    ),
+    name = "Tariff Category"
   ) +
   # Average line
   geom_hline(

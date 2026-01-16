@@ -34,12 +34,14 @@ colors <- list(
   grid = "#e2e8f0"
 )
 
-# Event category colors (named vector for safe access)
+# Event category colors (named vector for safe access) - highly distinct
 event_colors <- c(
-  "China" = "#ef4444",
-  "Mexico-Canada" = "#f59e0b",
-  "Steel-Aluminum" = "#10b981",
-  "Global" = "#8b5cf6",
+  "China" = "#dc2626",
+  "Mexico-Canada" = "#ea580c",
+  "Steel-Aluminum" = "#0ea5e9",
+  "Bilateral" = "#7c3aed",
+  "Global" = "#059669",
+  "India" = "#d97706",
   "Biden" = "#6366f1"
 )
 
@@ -139,6 +141,16 @@ setnames(trump_events, c("date", "event_name", "event_type", "description", past
 trump_events <- trump_events[date != "date" & !is.na(date) & date != "", .(date, event_name, event_type, description)]
 # Parse dates from DD-MM-YYYY format in CSV
 trump_events[, date := lubridate::dmy(date)]
+# Assign categories for consistent coloring across all visualizations
+trump_events[, category := fcase(
+  grepl("China", event_name, ignore.case = TRUE), "China",
+  grepl("Mexico|Canada", event_name, ignore.case = TRUE), "Mexico-Canada",
+  grepl("Steel|Alum", event_name, ignore.case = TRUE), "Steel-Aluminum",
+  grepl("Vietnam|Indonesia|Korea|Brazil", event_name, ignore.case = TRUE), "Bilateral",
+  grepl("Global|Baseline|Auto", event_name, ignore.case = TRUE), "Global",
+  grepl("India", event_name, ignore.case = TRUE), "India",
+  default = "Global"
+)]
 
 message("Converting to data.table...")
 setDT(monthly_totals); message("  setDT monthly_totals")
