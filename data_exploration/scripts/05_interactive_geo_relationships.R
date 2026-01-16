@@ -23,7 +23,14 @@ hs10 <- arrow::read_parquet(here("data", "processed", "top_entities_hs10.parquet
 countries <- arrow::read_parquet(here("data", "processed", "top_entities_countries.parquet"))
 chapters <- arrow::read_parquet(here("data", "processed", "top_entities_chapters.parquet"))
 top_entities <- list(hs10 = hs10, countries = countries, chapters = chapters)
-hs_lookup <- arrow::read_parquet(here("data", "processed", "hs_lookup.parquet"))
+hs10_lookup <- data.table::fread(here("data", "processed", "hs10_lookup.csv"))
+hs_lookup <- hs10_lookup[, .(
+  HTS_Number = as.character(hts10),
+  chapter = as.integer(hs2),
+  chapter_name = chapter_name,
+  section_name = section_name,
+  item_desc = description_short
+)]
 
 setDT(monthly_by_country)
 setDT(monthly_by_chapter)

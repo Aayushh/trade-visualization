@@ -122,7 +122,15 @@ monthly_by_hs6 <- arrow::read_parquet(here("data", "processed", "monthly_by_hs6.
 monthly_by_hs10 <- arrow::read_parquet(here("data", "processed", "monthly_by_hs10.parquet")); message("Loaded monthly_by_hs10")
 monthly_by_chapter <- arrow::read_parquet(here("data", "processed", "monthly_by_chapter.parquet")); message("Loaded monthly_by_chapter")
 monthly_by_country <- arrow::read_parquet(here("data", "processed", "monthly_by_country.parquet")); message("Loaded monthly_by_country")
-hs_lookup <- arrow::read_parquet(here("data", "processed", "hs_lookup.parquet")); message("Loaded hs_lookup")
+hs10_lookup <- data.table::fread(here("data", "processed", "hs10_lookup.csv")); message("Loaded hs10_lookup.csv")
+# Normalize fields for joins
+hs10_dt <- hs10_lookup[, .(
+  HTS_Number = as.character(hts10),
+  chapter = as.integer(hs2),
+  chapter_name = chapter_name,
+  section_name = section_name,
+  item_desc = description_short
+)]
 
 # Load centralized tariff events config
 trump_events <- fread(here("data", "tariff_events_config.csv"), header = FALSE, fill = TRUE)
@@ -137,9 +145,10 @@ setDT(monthly_totals); message("  setDT monthly_totals")
 setDT(monthly_by_hs6); message("  setDT monthly_by_hs6")
 setDT(monthly_by_hs10); message("  setDT monthly_by_hs10")
 setDT(monthly_by_chapter); message("  setDT monthly_by_chapter")
+monthly_by_chapter[, chapter := as.integer(chapter)]
 setDT(monthly_by_country); message("  setDT monthly_by_country")
 setDT(trump_events); message("  setDT trump_events")
-setDT(hs_lookup); message("  setDT hs_lookup")
+setDT(hs10_dt); message("  setDT hs10_dt")
 
 # ============================================================================
 # EXPLORER 1: MONTHLY IMPORTS WITH TRUMP EVENT MARKERS & FILTERING
@@ -158,7 +167,7 @@ monthly_totals[, rate_69_pct := avg_rate_69 * 100]
 # Prepare country and chapter data for dropdown
 monthly_by_country[, trade_value_bn := trade_value / 1e9]
 monthly_by_chapter <- merge(monthly_by_chapter,
-  hs_lookup[, .(chapter, chapter_name)][!duplicated(chapter)],
+  unique(hs10_dt[, .(chapter, chapter_name, section_name)], by = "chapter"),
   by = "chapter", all.x = TRUE
 )
 monthly_by_chapter[, trade_value_bn := trade_value / 1e9]
@@ -553,7 +562,7 @@ top_chapters <- monthly_by_chapter[, .(total_trade = sum(trade_value, na.rm = TR
 ][order(-total_trade)][1:15]
 
 # Merge with chapter names
-chapter_lookup <- unique(hs_lookup[!is.na(chapter_name), .(chapter, chapter_name)], by = "chapter")
+chapter_lookup <- unique(hs10_dt[!is.na(chapter_name), .(chapter, chapter_name)], by = "chapter")
 top_chapters_named <- merge(top_chapters, chapter_lookup, by = "chapter", all.x = TRUE)
 
 # Filter monthly data for top chapters and add names

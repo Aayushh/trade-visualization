@@ -69,11 +69,19 @@ hs10 <- arrow::read_parquet(here("data", "processed", "top_entities_hs10.parquet
 countries <- arrow::read_parquet(here("data", "processed", "top_entities_countries.parquet"))
 chapters <- arrow::read_parquet(here("data", "processed", "top_entities_chapters.parquet"))
 top_entities <- list(hs10 = hs10, countries = countries, chapters = chapters)
-hs_lookup <- arrow::read_parquet(here("data", "processed", "hs_lookup.parquet"))
+hs10_lookup <- data.table::fread(here("data", "processed", "hs10_lookup.csv"))
 
 setDT(monthly_by_hs10)
+monthly_by_hs10[, HTS_Number := as.character(HTS_Number)]
 setDT(monthly_by_hs6)
-setDT(hs_lookup)
+setDT(hs10_lookup)
+hs10_dt <- hs10_lookup[, .(
+  HTS_Number = as.character(hts10),
+  chapter = as.integer(hs2),
+  chapter_name = chapter_name,
+  section_name = section_name,
+  item_desc = description_short
+)]
 
 # ============================================================================
 # EXPLORER 1: INTERACTIVE TREEMAP (Top 200 HS10 by trade value)
@@ -83,6 +91,7 @@ message("[1/5] Generating HS10 treemap...\n")
 
 # Get top HS10 products
 top_hs10_data <- top_entities$hs10[1:200]
+top_hs10_data[, HTS_Number := as.character(HTS_Number)]
 top_hs10_data[, trade_value_bn := total_trade / 1e9]
 
 # Rename chapter to avoid conflict
@@ -91,7 +100,7 @@ setnames(top_hs10_data, "chapter", "chapter_top")
 # Merge with chapter names and descriptions
 top_hs10_merged <- merge(
   top_hs10_data,
-  hs_lookup[, .(HTS_Number, chapter, item_desc, chapter_name)],
+  hs10_dt[, .(HTS_Number, chapter, item_desc, chapter_name, section_name)],
   by = "HTS_Number",
   all.x = TRUE
 )
@@ -201,12 +210,13 @@ p1_with_desc <- htmlwidgets::appendContent(p1, HTML(p1_desc))
 message("[2/5] Building Products table...\n")
 
 top_products <- top_entities$hs10
+top_products[, HTS_Number := as.character(HTS_Number)]
 top_products[, trade_value_bn := total_trade / 1e9]
 top_products[, avg_tariff_pct := avg_tariff * 100]
 
 # Merge with product descriptions
 top_products_merged <- merge(top_products,
-  hs_lookup[, .(HTS_Number, item_desc, chapter_name)][!duplicated(HTS_Number)],
+  hs10_dt[, .(HTS_Number, item_desc, chapter_name)][!duplicated(HTS_Number)],
   by = "HTS_Number", all.x = TRUE
 )
 
@@ -389,7 +399,7 @@ message("[4/5] Building Tariff distribution by chapter...\n")
 top_chapters <- top_entities$chapters[1:15]
 tariff_dist <- merge(
   monthly_by_hs10[, .(HTS_Number, tariff_rate)],
-  hs_lookup[, .(HTS_Number, chapter)],
+  hs10_dt[, .(HTS_Number, chapter)],
   by = "HTS_Number", all.x = TRUE
 )
 
@@ -398,7 +408,7 @@ tariff_dist[, tariff_rate_pct := tariff_rate * 100]
 
 # Merge with chapter names
 tariff_dist <- merge(tariff_dist,
-  hs_lookup[, .(chapter, chapter_name)][!duplicated(chapter)],
+  hs10_dt[, .(chapter, chapter_name)][!duplicated(chapter)],
   by = "chapter", all.x = TRUE
 )
 
@@ -467,11 +477,11 @@ message("[5/5] Generating trade-tariff scatter plot...\n")
 
 # Get monthly HS10 data with dates
 scatter_monthly <- monthly_by_hs10[, .(HTS_Number, date, trade_value, tariff_rate)]
-scatter_monthly[, chapter := substr(HTS_Number, 1, 2)]
-chapter_lookup <- unique(hs_lookup[!is.na(chapter_name), .(chapter, chapter_name)])
+scatter_monthly[, chapter := as.integer(substr(HTS_Number, 1, 2))]
+chapter_lookup <- unique(hs10_dt[!is.na(chapter_name), .(chapter, chapter_name)])
 scatter_monthly <- merge(scatter_monthly, chapter_lookup, by = "chapter", all.x = TRUE)
 
-item_lookup <- hs_lookup[, .(HTS_Number, item_desc)]
+item_lookup <- hs10_dt[, .(HTS_Number, item_desc)]
 scatter_monthly <- merge(scatter_monthly, item_lookup, by = "HTS_Number", all.x = TRUE)
 
 # Filter to top 500 products
