@@ -43,25 +43,25 @@ event_colors <- c(
 )
 
 # Premium ggplot2 theme
-theme_premium <- function(base_size = 14) {
+theme_premium <- function(base_size = 18) {
   theme_minimal(base_size = base_size, base_family = "Inter") +
     theme(
-      # Title and subtitle
+      # Title and subtitle - DOUBLED sizes
       plot.title = element_text(
         face = "bold",
-        size = rel(2.2),
+        size = rel(3.5),
         color = colors$text_dark,
-        margin = margin(b = 12),
+        margin = margin(b = 18),
         hjust = 0
       ),
       plot.subtitle = element_text(
-        size = rel(1.2),
+        size = rel(1.8),
         color = colors$text_muted,
-        margin = margin(b = 20),
+        margin = margin(b = 25),
         hjust = 0
       ),
       plot.caption = element_text(
-        size = rel(0.75),
+        size = rel(0.85),
         color = colors$text_muted,
         hjust = 0,
         margin = margin(t = 15)
@@ -69,12 +69,12 @@ theme_premium <- function(base_size = 14) {
 
       # Axes
       axis.title = element_text(
-        size = rel(0.9),
+        size = rel(1.1),
         color = colors$text_dark,
-        face = "plain"
+        face = "bold"
       ),
       axis.text = element_text(
-        size = rel(0.85),
+        size = rel(1.0),
         color = colors$text_muted
       ),
       axis.line = element_line(color = colors$grid, linewidth = 0.5),
@@ -83,18 +83,19 @@ theme_premium <- function(base_size = 14) {
       panel.grid.major = element_line(color = colors$grid, linewidth = 0.3),
       panel.grid.minor = element_blank(),
 
-      # Legend
-      legend.title = element_text(face = "bold", size = rel(0.9)),
-      legend.text = element_text(size = rel(0.85)),
+      # Legend - DOUBLED sizes
+      legend.title = element_text(face = "bold", size = rel(1.4)),
+      legend.text = element_text(size = rel(1.2)),
       legend.background = element_rect(fill = "white", color = NA),
       legend.key = element_rect(fill = "transparent"),
+      legend.key.size = unit(1.5, "lines"),
 
       # Plot background
       plot.background = element_rect(fill = "white", color = NA),
       panel.background = element_rect(fill = colors$bg_light, color = NA),
 
       # Margins
-      plot.margin = margin(20, 20, 20, 20)
+      plot.margin = margin(25, 25, 25, 25)
     )
 }
 
