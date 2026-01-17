@@ -513,39 +513,60 @@ htmlwidgets::saveWidget(p3_with_desc, file.path(out_dir, "03_trade_vs_tariff_sca
 message("  ✅ Saved: 03_trade_vs_tariff_scatter.html\n")
 
 # ============================================================================
-# EXPLORER 4: TOP 20 COUNTRIES EVOLUTION (multi-line chart)
+# EXPLORER 4: TOP N COUNTRIES EVOLUTION (multi-line chart with selector)
 # ============================================================================
 
 message("Building Explorer 4: Top countries evolution...\n")
 
-# Get top 20 countries by total trade value
-top_countries <- monthly_by_country[, .(total_trade = sum(trade_value, na.rm = TRUE)),
+# Get top 30 countries by total trade value (max range for selection)
+all_top_countries <- monthly_by_country[, .(total_trade = sum(trade_value, na.rm = TRUE)),
   by = Country
-][order(-total_trade)][1:20]
+][order(-total_trade)][1:30]
 
-# Filter monthly data for top countries
-country_ts <- monthly_by_country[Country %in% top_countries$Country]
-country_ts[, trade_value_bn := trade_value / 1e9]
+# Add billion conversion to monthly data
+monthly_by_country[, trade_value_bn := trade_value / 1e9]
 
-# Create base plot with all countries using viridis colors
+# Create base plot
 p4 <- plot_ly(type = "scatter", mode = "lines")
-country_colors <- viridisLite::viridis(nrow(top_countries))
 
-for (i in seq_len(nrow(top_countries))) {
-  country <- top_countries$Country[i]
-  data_country <- country_ts[Country == country][order(date)]
+# Define selectable top N options
+top_n_options <- c(5, 10, 15, 20, 25, 30)
+
+# Create traces for all 30 countries
+country_colors <- viridisLite::viridis(30)
+
+for (i in seq_len(nrow(all_top_countries))) {
+  country <- all_top_countries$Country[i]
+  data_country <- monthly_by_country[Country == country][order(date)]
 
   p4 <- p4 %>%
     add_trace(
       x = data_country$date,
       y = data_country$trade_value_bn,
       name = country,
-      visible = TRUE,
+      visible = if (i <= 20) TRUE else FALSE,  # Show top 20 by default
       line = list(color = country_colors[i], width = 2.5),
       marker = list(color = country_colors[i], size = 4),
       hovertemplate = paste0("<b>", country, "</b><br>%{x|%B %Y}: <b>$%{y:.1f}B</b><extra></extra>")
     )
 }
+
+# Create update menu buttons for different top N selections
+top_n_buttons <- lapply(top_n_options, function(n) {
+  visible_vec <- rep(FALSE, 30)
+  visible_vec[1:n] <- TRUE
+  
+  list(
+    method = "update",
+    args = list(
+      list(visible = as.list(visible_vec)),
+      list(title = list(
+        text = sprintf("<b>Top %d Trading Partners Over Time</b><br><span style='font-size:14px;color:#6b7280;'>Monthly Import Values | January 2024 – August 2025</span>", n)
+      ))
+    ),
+    label = paste0("Top ", n)
+  )
+})
 
 p4 <- p4 %>%
   layout(
@@ -561,21 +582,34 @@ p4 <- p4 %>%
     paper_bgcolor = "white",
     hovermode = "x unified",
     height = 750,
-    margin = list(l = 80, r = 160, t = 100, b = 80),
+    margin = list(l = 80, r = 160, t = 140, b = 80),
     legend = list(x = 1.02, y = 1, bgcolor = "rgba(255,255,255,0.9)", bordercolor = colors$grid, borderwidth = 1),
     shapes = event_shapes,
-    annotations = event_annotations
+    annotations = event_annotations,
+    updatemenus = list(
+      list(
+        type = "dropdown",
+        active = 3,  # Top 20 is the 4th option (0-indexed = 3)
+        x = 0.5, xanchor = "center",
+        y = 1.12, yanchor = "top",
+        bgcolor = "white",
+        bordercolor = colors$grid,
+        font = list(size = 12),
+        buttons = top_n_buttons
+      )
+    )
   ) %>%
   config(responsive = TRUE, displaylogo = FALSE)
 
 p4_desc <- create_description_panel(
-  title = "Trading Partners Evolution",
-  what_it_shows = "Monthly import values from the top 20 US trading partners. Each line represents a country; color is assigned based on total trade ranking. Dotted vertical lines mark tariff events. The legend shows all countries with the ability to isolate specific ones.",
-  how_to_use = "<li><b>Click legend:</b> Click a country name to toggle its visibility</li>
+  title = "Trading Partners Evolution (Customizable)",
+  what_it_shows = "Monthly import values from US trading partners. Use the dropdown to select how many top partners to display (5, 10, 15, 20, 25, or 30). Each line represents a country; color is assigned based on total trade ranking. Dotted vertical lines mark tariff events.",
+  how_to_use = "<li><b>Select Top N:</b> Use the dropdown at the top to choose how many trading partners to display</li>
+               <li><b>Click legend:</b> Click a country name to toggle its visibility</li>
                <li><b>Double-click legend:</b> Isolate a single country (double-click again to reset)</li>
                <li><b>Hover:</b> See all country values at any date with unified tooltip</li>
                <li><b>Compare:</b> Look for divergent patterns after tariff events</li>",
-  key_insights = "China remains the largest source but shows volatility around tariff dates. Mexico and Canada show relatively stable patterns. Vietnam and other Southeast Asian countries exhibit growth trends as potential trade diversion.",
+  key_insights = "China remains the largest source but shows volatility around tariff dates. Mexico and Canada show relatively stable patterns. Vietnam and other Southeast Asian countries exhibit growth trends as potential trade diversion. Use smaller N values for clearer comparison of major partners.",
   color = colors$info
 )
 
