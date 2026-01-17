@@ -70,6 +70,13 @@ viz_cards <- list(
         insights = "Market share shifts reveal which sectors gained or lost ground during the tariff period.",
         chart_type = "Stacked Area", link = "05_chapters_stacked_area.html", link_type = "html"
     ),
+    list(
+        id = "ts-6", category = "timeseries", num = "18", icon = "[T]", title = "Tariff Events Timeline",
+        subtitle = "Interactive Policy Timeline",
+        description = "Interactive timeline showing all 14 major Trump administration tariff events from February to May 2025.",
+        insights = "Explore the chronological progression of tariff policy changes with detailed event information.",
+        chart_type = "Interactive Timeline", link = "18_tariff_timeline.html", link_type = "html"
+    ),
 
     # Products
     list(
