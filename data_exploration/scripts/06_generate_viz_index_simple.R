@@ -251,10 +251,14 @@ html_content <- '<!DOCTYPE html>
         .card-subtitle { font-size: 0.85rem; color: var(--accent-primary); margin-bottom: 0.75rem; }
         .card-description { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 0.75rem; }
         .card-insight { font-size: 0.85rem; color: var(--text-muted); font-style: italic; margin-bottom: 1rem; padding: 0.75rem; background: var(--bg-glass); border-radius: 8px; }
-        .card-footer { display: flex; justify-content: space-between; align-items: center; }
+        .card-footer { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
+        .card-actions { display: flex; gap: 0.5rem; }
         .card-badge { padding: 0.25rem 0.75rem; background: var(--bg-glass); border-radius: 20px; font-size: 0.75rem; color: var(--text-muted); }
-        .card-link { padding: 0.5rem 1rem; background: var(--accent-primary); color: white; text-decoration: none; border-radius: 8px; font-size: 0.85rem; font-weight: 500; transition: all 0.3s; }
+        .card-link { padding: 0.5rem 1rem; background: var(--accent-primary); color: white; text-decoration: none; border-radius: 8px; font-size: 0.85rem; font-weight: 500; transition: all 0.3s; border: none; cursor: pointer; }
         .card-link:hover { background: var(--accent-secondary); }
+        .copy-link-btn { padding: 0.5rem 1rem; background: var(--bg-glass); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.3s; }
+        .copy-link-btn:hover { background: var(--accent-primary); color: white; border-color: var(--accent-primary); }
+        .copy-link-btn.copied { background: #10b981; color: white; border-color: #10b981; }
 
         footer { background: var(--bg-secondary); backdrop-filter: blur(20px); border-radius: 24px; padding: 2rem; margin-top: 2rem; text-align: center; }
         .footer-title { font-size: 1.25rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem; }
@@ -329,7 +333,10 @@ for (viz in viz_cards) {
                     <div class="card-insight">TIP: %s</div>
                     <div class="card-footer">
                         <span class="card-badge">%s</span>
-                        <a href="#" class="card-link" onclick="openInModal(\'%s\', \'%s\', %s); return false;">Open</a>
+                        <div class="card-actions">
+                            <button class="copy-link-btn" onclick="copyLink(\'%s\', this); return false;" title="Copy shareable link">📋 Copy Link</button>
+                            <a href="#" class="card-link" onclick="openInModal(\'%s\', \'%s\', %s); return false;">Open</a>
+                        </div>
                     </div>
                 </div>
             </div>',
@@ -344,6 +351,7 @@ for (viz in viz_cards) {
         viz$description,
         viz$insights,
         viz$chart_type,
+        viz$link,
         viz$link,
         gsub("'", "\\\\'", viz$title),
         tolower(as.character(is_image))
@@ -378,6 +386,22 @@ html_content <- paste0(html_content, sprintf('
     </div>
 
     <script>
+        function copyLink(relativeUrl, button) {
+            var baseUrl = window.location.origin + window.location.pathname.replace("index.html", "");
+            var fullUrl = baseUrl + relativeUrl;
+            navigator.clipboard.writeText(fullUrl).then(function() {
+                var originalText = button.innerHTML;
+                button.innerHTML = "✓ Copied!";
+                button.classList.add("copied");
+                setTimeout(function() {
+                    button.innerHTML = originalText;
+                    button.classList.remove("copied");
+                }, 2000);
+            }).catch(function(err) {
+                alert("Failed to copy link. URL: " + fullUrl);
+            });
+        }
+
         function openInModal(url, title, isImage) {
             var modal = document.getElementById("vizModal");
             var body = document.getElementById("modalBody");
