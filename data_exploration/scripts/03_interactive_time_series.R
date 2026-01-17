@@ -278,12 +278,17 @@ for (i in seq_along(top_countries_list)) {
 for (i in seq_len(nrow(top_chapters_list))) {
   visible_vec <- c(FALSE, rep(FALSE, length(top_countries_list) + nrow(top_chapters_list)))
   visible_vec[length(top_countries_list) + i + 1] <- TRUE
+  # Truncate chapter name to 45 chars to prevent title from compressing graph
+  chapter_name_truncated <- substr(top_chapters_list$chapter_name[i], 1, 45)
+  if (nchar(top_chapters_list$chapter_name[i]) > 45) {
+    chapter_name_truncated <- paste0(chapter_name_truncated, "...")
+  }
   button_list[[length(button_list) + 1]] <- list(
     method = "update",
     args = list(
       list(visible = visible_vec),
       list(
-        title = list(text = paste0("<b>Ch", top_chapters_list$chapter[i], ": ", top_chapters_list$chapter_name[i], "</b><br><span style='font-size:14px;color:#6b7280;'>Monthly imports</span>")),
+        title = list(text = paste0("<b>Ch", top_chapters_list$chapter[i], ": ", chapter_name_truncated, "</b><br><span style='font-size:13px;color:#6b7280;'>Monthly imports</span>")),
         yaxis = list(autorange = TRUE)
       )
     ),
@@ -291,13 +296,15 @@ for (i in seq_len(nrow(top_chapters_list))) {
   )
 }
 
-# Add event shapes with category colors AND annotations with hover text
+# Add event shapes with category colors AND annotations with detailed hover text
 event_shapes <- list()
 event_annotations <- list()
 for (i in seq_len(nrow(trump_events))) {
   d <- trump_events$date[i]
   cat_val <- as.character(trump_events$category[i])
   event_name_val <- as.character(trump_events$event_name[i])
+  event_type_val <- as.character(trump_events$event_type[i])
+  description_val <- as.character(trump_events$description[i])
 
   # Handle NULL, NA, or empty category
   if (is.null(cat_val) || is.na(cat_val) || cat_val == "" || length(cat_val) == 0) {
@@ -314,7 +321,15 @@ for (i in seq_len(nrow(trump_events))) {
     line = list(color = event_color, width = 2, dash = "dash")
   )))
   
-  # Add annotation with hover capability
+  # Add annotation with detailed hover text
+  hover_text_detailed <- paste0(
+    "<b>", event_name_val, "</b><br>",
+    "<b>Date:</b> ", format(d, "%B %d, %Y"), "<br>",
+    "<b>Type:</b> ", event_type_val, "<br>",
+    "<b>Category:</b> ", cat_val, "<br>",
+    "<b>Details:</b> ", description_val
+  )
+  
   event_annotations <- append(event_annotations, list(list(
     x = d, y = 1, yref = "paper",
     text = paste0("<b>", event_name_val, "</b>"),
@@ -324,8 +339,8 @@ for (i in seq_len(nrow(trump_events))) {
     yanchor = "bottom",
     font = list(size = 9, color = event_color),
     opacity = 0.7,
-    hovertext = paste0(event_name_val, "<br>", format(d, "%b %d, %Y")),
-    hoverlabel = list(bgcolor = "white", bordercolor = event_color)
+    hovertext = hover_text_detailed,
+    hoverlabel = list(bgcolor = "white", bordercolor = event_color, font = list(size = 12))
   )))
 }
 
