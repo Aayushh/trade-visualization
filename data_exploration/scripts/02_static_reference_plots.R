@@ -67,14 +67,14 @@ theme_premium <- function(base_size = 18) {
         margin = margin(t = 15)
       ),
 
-      # Axes
+      # Axes (make labels and ticks larger)
       axis.title = element_text(
-        size = rel(1.1),
+        size = rel(1.4),
         color = colors$text_dark,
         face = "bold"
       ),
       axis.text = element_text(
-        size = rel(1.0),
+        size = rel(1.25),
         color = colors$text_muted
       ),
       axis.line = element_line(color = colors$grid, linewidth = 0.5),
@@ -83,12 +83,12 @@ theme_premium <- function(base_size = 18) {
       panel.grid.major = element_line(color = colors$grid, linewidth = 0.3),
       panel.grid.minor = element_blank(),
 
-      # Legend - DOUBLED sizes
-      legend.title = element_text(face = "bold", size = rel(1.4)),
-      legend.text = element_text(size = rel(1.2)),
+      # Legend - larger for readability
+      legend.title = element_text(face = "bold", size = rel(1.7)),
+      legend.text = element_text(size = rel(1.4)),
       legend.background = element_rect(fill = "white", color = NA),
       legend.key = element_rect(fill = "transparent"),
-      legend.key.size = unit(1.5, "lines"),
+      legend.key.size = unit(1.8, "lines"),
 
       # Plot background
       plot.background = element_rect(fill = "white", color = NA),
