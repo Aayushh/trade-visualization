@@ -76,7 +76,7 @@
         .card-title { font-size: 1.1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem; }
         .card-subtitle { font-size: 0.85rem; color: var(--accent-primary); margin-bottom: 0.75rem; }
         .card-description { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 0.75rem; }
-        .card-insight { font-size: 0.85rem; color: var(--text-muted); font-style: italic; margin-bottom: 1rem; padding: 0.75rem; background: var(--bg-glass); border-radius: 8px; }
+        .card-insight { display: none; font-size: 0.85rem; color: var(--text-muted); font-style: italic; margin-bottom: 1rem; padding: 0.75rem; background: var(--bg-glass); border-radius: 8px; }
         .card-footer { display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
         .card-actions { display: flex; gap: 0.5rem; }
         .card-badge { padding: 0.25rem 0.75rem; background: var(--bg-glass); border-radius: 20px; font-size: 0.75rem; color: var(--text-muted); }
@@ -115,11 +115,14 @@
             <div class="header-top">
                 <div>
                     <h1>US Trade Data Visualization Suite</h1>
-                    <p class="subtitle">Interactive Analysis of Trump-Era Tariff Pass-Through (Jan 2024 - Aug 2025)</p>
+                    <p class="subtitle">Interactive Analysis of Trump-Era Tariff Pass-Through (Jan 2024 - Sept 2025)</p>
                 </div>
-                <button class="theme-toggle" onclick="toggleTheme()">
-                    <span id="themeIcon">Dark</span> Mode
-                </button>
+                <div style="display: flex; gap: 0.75rem; align-items: center;">
+                    <a href="https://www.linkedin.com/in/aayush-agarwal-bba41677/" target="_blank" class="theme-toggle" style="text-decoration: none;">LinkedIn</a>
+                    <button class="theme-toggle" onclick="toggleTheme()">
+                        <span id="themeIcon">Dark</span> Mode
+                    </button>
+                </div>
             </div>
             <div class="context-box">
                 <h3>About This Analysis</h3>
@@ -145,7 +148,7 @@
 
             <div class="card" data-category="static" data-title="Monthly US Imports" data-description="Publication-ready time series showing total US imports from January 2024 to August 2025. Vertical dashed lines mark major Trump-era tariff implementation dates.">
                 <div class="card-header">STATIC - #S1</div>
-                <div class="card-thumbnail">[S]</div>
+                <div class="card-thumbnail">📊</div>
                 <div class="card-content">
                     <div class="card-title">Monthly US Imports</div>
                     <div class="card-subtitle">Time Series with Event Markers</div>
@@ -162,7 +165,7 @@
             </div>
             <div class="card" data-category="static" data-title="Top 30 HS Chapters" data-description="Horizontal bar chart ranking the top 30 HS chapters by total import value. Bar colors indicate average tariff rate.">
                 <div class="card-header">STATIC - #S2</div>
-                <div class="card-thumbnail">[S]</div>
+                <div class="card-thumbnail">📊</div>
                 <div class="card-content">
                     <div class="card-title">Top 30 HS Chapters</div>
                     <div class="card-subtitle">Trade Volume by Category</div>
@@ -179,7 +182,7 @@
             </div>
             <div class="card" data-category="static" data-title="Top 30 Countries" data-description="Horizontal bar chart of the 30 largest US import partners by total trade value.">
                 <div class="card-header">STATIC - #S3</div>
-                <div class="card-thumbnail">[S]</div>
+                <div class="card-thumbnail">📊</div>
                 <div class="card-content">
                     <div class="card-title">Top 30 Countries</div>
                     <div class="card-subtitle">Trade Partners by Value</div>
@@ -196,7 +199,7 @@
             </div>
             <div class="card" data-category="timeseries" data-title="Monthly Imports Interactive" data-description="Interactive exploration of monthly US imports with dropdown to filter by country or HS chapter.">
                 <div class="card-header">TIMESERIES - #01</div>
-                <div class="card-thumbnail">[T]</div>
+                <div class="card-thumbnail">📈</div>
                 <div class="card-content">
                     <div class="card-title">Monthly Imports Interactive</div>
                     <div class="card-subtitle">With Event Markers and Filtering</div>
@@ -213,7 +216,7 @@
             </div>
             <div class="card" data-category="timeseries" data-title="Tariff Rate Evolution" data-description="Four tariff rate metrics tracked over time: Overall rate, Dutiable rate, Section 61 (China), and Section 69 (Steel/Aluminum).">
                 <div class="card-header">TIMESERIES - #02</div>
-                <div class="card-thumbnail">[T]</div>
+                <div class="card-thumbnail">📈</div>
                 <div class="card-content">
                     <div class="card-title">Tariff Rate Evolution</div>
                     <div class="card-subtitle">4-Rate Decomposition</div>
@@ -230,7 +233,7 @@
             </div>
             <div class="card" data-category="timeseries" data-title="Trade vs Tariff Scatter" data-description="Monthly scatter plot with trade value on X-axis and tariff rate on Y-axis.">
                 <div class="card-header">TIMESERIES - #03</div>
-                <div class="card-thumbnail">[T]</div>
+                <div class="card-thumbnail">📈</div>
                 <div class="card-content">
                     <div class="card-title">Trade vs Tariff Scatter</div>
                     <div class="card-subtitle">Bubble Size = Tariffs Paid</div>
@@ -247,7 +250,7 @@
             </div>
             <div class="card" data-category="timeseries" data-title="Countries Evolution" data-description="Line chart showing monthly import values for the top 20 trading partners.">
                 <div class="card-header">TIMESERIES - #04</div>
-                <div class="card-thumbnail">[T]</div>
+                <div class="card-thumbnail">📈</div>
                 <div class="card-content">
                     <div class="card-title">Countries Evolution</div>
                     <div class="card-subtitle">Top 20 Partners Over Time</div>
@@ -264,7 +267,7 @@
             </div>
             <div class="card" data-category="timeseries" data-title="HS Chapters Stacked Area" data-description="Stacked area chart showing the composition of US imports by HS chapter over time.">
                 <div class="card-header">TIMESERIES - #05</div>
-                <div class="card-thumbnail">[T]</div>
+                <div class="card-thumbnail">📈</div>
                 <div class="card-content">
                     <div class="card-title">HS Chapters Stacked Area</div>
                     <div class="card-subtitle">Market Share Over Time</div>
@@ -281,7 +284,7 @@
             </div>
             <div class="card" data-category="timeseries" data-title="Tariff Events Timeline" data-description="Interactive timeline showing all 14 major Trump administration tariff events from February to May 2025.">
                 <div class="card-header">TIMESERIES - #18</div>
-                <div class="card-thumbnail">[T]</div>
+                <div class="card-thumbnail">📈</div>
                 <div class="card-content">
                     <div class="card-title">Tariff Events Timeline</div>
                     <div class="card-subtitle">Interactive Policy Timeline</div>
@@ -298,7 +301,7 @@
             </div>
             <div class="card" data-category="products" data-title="Trade-Tariff Scatter" data-description="Interactive scatter plot of the top 500 HS10 products. X-axis: cumulative trade value. Y-axis: average tariff rate. Color: HS chapter.">
                 <div class="card-header">PRODUCTS - #06</div>
-                <div class="card-thumbnail">[P]</div>
+                <div class="card-thumbnail">📦</div>
                 <div class="card-content">
                     <div class="card-title">Trade-Tariff Scatter</div>
                     <div class="card-subtitle">500 Products by Volume and Rate</div>
@@ -315,7 +318,7 @@
             </div>
             <div class="card" data-category="products" data-title="Top Products Table" data-description="Interactive data table of the top 500 HS10 products with full descriptions, trade values, and tariff rates.">
                 <div class="card-header">PRODUCTS - #07</div>
-                <div class="card-thumbnail">[P]</div>
+                <div class="card-thumbnail">📦</div>
                 <div class="card-content">
                     <div class="card-title">Top Products Table</div>
                     <div class="card-subtitle">Searchable HS10 Details</div>
@@ -332,7 +335,7 @@
             </div>
             <div class="card" data-category="products" data-title="Trade Concentration Lorenz" data-description="Lorenz curve showing the concentration of US trade value across products.">
                 <div class="card-header">PRODUCTS - #08</div>
-                <div class="card-thumbnail">[P]</div>
+                <div class="card-thumbnail">📦</div>
                 <div class="card-content">
                     <div class="card-title">Trade Concentration Lorenz</div>
                     <div class="card-subtitle">Gini Coefficient Analysis</div>
@@ -349,7 +352,7 @@
             </div>
             <div class="card" data-category="products" data-title="Tariff Distribution Violin" data-description="Violin plots showing the distribution of tariff rates within each major HS chapter.">
                 <div class="card-header">PRODUCTS - #09</div>
-                <div class="card-thumbnail">[P]</div>
+                <div class="card-thumbnail">📦</div>
                 <div class="card-content">
                     <div class="card-title">Tariff Distribution Violin</div>
                     <div class="card-subtitle">By HS Chapter</div>
@@ -366,7 +369,7 @@
             </div>
             <div class="card" data-category="products" data-title="HS10 Product Treemap" data-description="Treemap visualization of the top 200 HS10 products, nested by HS chapter.">
                 <div class="card-header">PRODUCTS - #14</div>
-                <div class="card-thumbnail">[P]</div>
+                <div class="card-thumbnail">📦</div>
                 <div class="card-content">
                     <div class="card-title">HS10 Product Treemap</div>
                     <div class="card-subtitle">200 Products Hierarchical View</div>
@@ -383,7 +386,7 @@
             </div>
             <div class="card" data-category="geographic" data-title="Country Dashboard" data-description="Bubble chart of top 30 trading partners. X-axis: sea distance from US. Y-axis: average tariff rate. Bubble size: total trade value.">
                 <div class="card-header">GEOGRAPHIC - #10</div>
-                <div class="card-thumbnail">[G]</div>
+                <div class="card-thumbnail">🌍</div>
                 <div class="card-content">
                     <div class="card-title">Country Dashboard</div>
                     <div class="card-subtitle">Trade Partner Overview</div>
@@ -400,7 +403,7 @@
             </div>
             <div class="card" data-category="geographic" data-title="Distance Effect Analysis" data-description="Box plots comparing tariff rates for near vs. far trading partners.">
                 <div class="card-header">GEOGRAPHIC - #11</div>
-                <div class="card-thumbnail">[G]</div>
+                <div class="card-thumbnail">🌍</div>
                 <div class="card-content">
                     <div class="card-title">Distance Effect Analysis</div>
                     <div class="card-subtitle">Near vs Far Countries</div>
@@ -417,7 +420,7 @@
             </div>
             <div class="card" data-category="geographic" data-title="Countries Heatmap" data-description="Heatmap showing monthly import values for the top 20 countries.">
                 <div class="card-header">GEOGRAPHIC - #12</div>
-                <div class="card-thumbnail">[G]</div>
+                <div class="card-thumbnail">🌍</div>
                 <div class="card-content">
                     <div class="card-title">Countries Heatmap</div>
                     <div class="card-subtitle">Monthly Trade Patterns</div>
@@ -434,7 +437,7 @@
             </div>
             <div class="card" data-category="geographic" data-title="Tariff by Country Origin" data-description="Overlapping histograms showing the distribution of monthly tariff rates for top 15 countries.">
                 <div class="card-header">GEOGRAPHIC - #13</div>
-                <div class="card-thumbnail">[G]</div>
+                <div class="card-thumbnail">🌍</div>
                 <div class="card-content">
                     <div class="card-title">Tariff by Country Origin</div>
                     <div class="card-subtitle">Distribution Histogram</div>
@@ -451,7 +454,7 @@
             </div>
             <div class="card" data-category="animations" data-title="Trade-Tariff Animation" data-description="Animated scatter plot showing how the top 100 products evolve over time. Use Play button or drag slider.">
                 <div class="card-header">ANIMATIONS - #15</div>
-                <div class="card-thumbnail">[A]</div>
+                <div class="card-thumbnail">🎬</div>
                 <div class="card-content">
                     <div class="card-title">Trade-Tariff Animation</div>
                     <div class="card-subtitle">Top 100 Products Evolution</div>
@@ -468,7 +471,7 @@
             </div>
             <div class="card" data-category="animations" data-title="Country Evolution Animation" data-description="Animated bubble chart tracking the top 50 trading partners from January 2024 to present. Features ISO country codes, continent colors, and audio effects.">
                 <div class="card-header">ANIMATIONS - #16</div>
-                <div class="card-thumbnail">[A]</div>
+                <div class="card-thumbnail">🎬</div>
                 <div class="card-content">
                     <div class="card-title">Country Evolution Animation</div>
                     <div class="card-subtitle">Top 50 Partners Over Time</div>
@@ -485,7 +488,7 @@
             </div>
             <div class="card" data-category="tools" data-title="HS Code Lookup" data-description="Search and explore HS 10-digit product codes with full descriptions, chapter names, and section information.">
                 <div class="card-header">TOOLS - #17</div>
-                <div class="card-thumbnail">[X]</div>
+                <div class="card-thumbnail">🔍</div>
                 <div class="card-content">
                     <div class="card-title">HS Code Lookup</div>
                     <div class="card-subtitle">Interactive Code Search</div>
@@ -506,7 +509,7 @@
             <div class="footer-title">US Trade Data Analysis</div>
             <div class="footer-subtitle">Interactive Visualization Suite</div>
             <div class="footer-meta">
-                <span>Generated: January 17, 2026</span>
+                <span>Generated: January 20, 2026</span>
                 <span>Data: USITC</span>
                 <span>Visualizations: R (plotly, ggplot2)</span>
             </div>
