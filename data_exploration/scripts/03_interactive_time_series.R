@@ -347,7 +347,7 @@ for (i in seq_len(nrow(trump_events))) {
 p1 <- p1_base %>%
   layout(
     title = list(
-      text = "<b>US Monthly Imports</b><br><span style='font-size:14px;color:#6b7280;'>January 2024 – August 2025 | Trump-era Tariff Period</span>",
+      text = "<b>US Monthly Imports</b><br><span style='font-size:14px;color:#6b7280;'>January 2024 – September 2025 | Trump-era Tariff Period</span>",
       font = list(family = "Inter, sans-serif", size = 20),
       x = 0.02
     ),
@@ -483,7 +483,7 @@ p3 <- plot_ly(monthly_totals,
 ) %>%
   layout(
     title = list(
-      text = "<b>Monthly Tariff Rate vs Revenue</b><br><span style='font-size:14px;color:#6b7280;'>Bubble size = Tariffs paid | January 2024 – August 2025</span>",
+      text = "<b>Monthly Tariff Rate vs Revenue</b><br><span style='font-size:14px;color:#6b7280;'>Bubble size = Tariffs paid | January 2024 – September 2025</span>",
       font = list(family = "Inter, sans-serif", size = 20),
       x = 0.02
     ),
@@ -569,7 +569,7 @@ top_n_buttons <- lapply(top_n_options, function(n) {
     args = list(
       list(visible = as.list(visible_vec)),
       list(title = list(
-        text = sprintf("<b>Top %d Trading Partners Over Time</b><br><span style='font-size:14px;color:#6b7280;'>Monthly Import Values | January 2024 – August 2025</span>", n)
+        text = sprintf("<b>Top %d Trading Partners Over Time</b><br><span style='font-size:14px;color:#6b7280;'>Monthly Import Values | January 2024 – September 2025</span>", n)
       ))
     ),
     label = paste0("Top ", n)
@@ -579,7 +579,7 @@ top_n_buttons <- lapply(top_n_options, function(n) {
 p4 <- p4 %>%
   layout(
     title = list(
-      text = "<b>Top 20 Trading Partners Over Time</b><br><span style='font-size:14px;color:#6b7280;'>Monthly Import Values | January 2024 – August 2025</span>",
+      text = "<b>Top 20 Trading Partners Over Time</b><br><span style='font-size:14px;color:#6b7280;'>Monthly Import Values | January 2024 – September 2025</span>",
       font = list(family = "Inter, sans-serif", size = 20),
       x = 0.02
     ),
@@ -588,7 +588,7 @@ p4 <- p4 %>%
     yaxis = list(title = "Import Value (Billions USD)", gridcolor = colors$grid),
     plot_bgcolor = "rgba(248, 250, 252, 0.8)",
     paper_bgcolor = "white",
-    hovermode = "x unified",
+    hovermode = "closest",
     height = 750,
     margin = list(l = 80, r = 160, t = 140, b = 80),
     legend = list(x = 1.02, y = 1, bgcolor = "rgba(255,255,255,0.9)", bordercolor = colors$grid, borderwidth = 1),
@@ -649,7 +649,7 @@ chapter_ts[, trade_value_bn := trade_value / 1e9]
 p5 <- plot_ly() %>%
   layout(
     title = list(
-      text = "<b>Top 15 HS Chapters: Market Share Evolution</b><br><span style='font-size:14px;color:#6b7280;'>100% Stacked Area | January 2024 – August 2025</span>",
+      text = "<b>Top 15 HS Chapters: Market Share Evolution</b><br><span style='font-size:14px;color:#6b7280;'>100% Stacked Area | January 2024 – September 2025</span>",
       font = list(family = "Inter, sans-serif", size = 20),
       x = 0.02
     ),
@@ -663,7 +663,7 @@ p5 <- plot_ly() %>%
     ),
     plot_bgcolor = "rgba(248, 250, 252, 0.8)",
     paper_bgcolor = "white",
-    hovermode = "x unified",
+    hovermode = "closest",
     height = 700,
     margin = list(l = 80, r = 80, t = 100, b = 80),
     legend = list(orientation = "v", x = 1.02, y = 1, bgcolor = "rgba(255,255,255,0.9)"),
@@ -696,8 +696,9 @@ for (i in seq_len(nrow(top_chapters))) {
       stackgroup = "one", groupnorm = "percent",
       fillcolor = paste0(colors_palette[i], "CC"),
       line = list(color = colors_palette[i], width = 0.5),
-      customdata = matrix(c(data_chapter$trade_value_bn, rep(full_chapter_label, nrow(data_chapter))), ncol = 2),
-      hovertemplate = "<b>%{customdata[1]}</b><br>%{x|%B %Y}<br>Trade Value: <b>$%{customdata[0]:.2f}B</b><br>Market Share: <b>%{y:.1f}%</b><extra></extra>",
+      text = full_chapter_label,
+      customdata = data_chapter$trade_value_bn,
+      hovertemplate = "<b>%{text}</b><br>%{x|%B %Y}<br>Trade Value: <b>$%{customdata:.2f}B</b><br>Market Share: <b>%{y:.1f}%</b><extra></extra>",
       legendgroup = chapter_code
     )
 }
