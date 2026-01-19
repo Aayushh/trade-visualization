@@ -11,21 +11,32 @@ cat("═════════════════════════
 
 # Load tariff events
 events_path <- file.path("..", "..", "data", "tariff_events_config.csv")
-trump_events <- fread(events_path)
-trump_events$date <- dmy(trump_events$date)
+trump_events <- fread(events_path, select = 1:4, header = TRUE)
+setnames(trump_events, c("date", "event_name", "event_type", "description"))
+# Remove empty rows
+trump_events <- trump_events[!is.na(event_name) & event_name != ""]
+trump_events[, date := dmy(date)]
+trump_events <- trump_events[!is.na(date)]
 setorder(trump_events, date)
+cat(sprintf("  Loaded %d tariff events\n", nrow(trump_events)))
 
 # Add formatted date
 trump_events$formatted_date <- format(trump_events$date, "%B %d, %Y")
 
 # Add category based on event name
 trump_events$category <- ifelse(grepl("China", trump_events$event_name, ignore.case = TRUE), "🇨🇳 China",
-                          ifelse(grepl("Mexico|Canada", trump_events$event_name, ignore.case = TRUE), "🌎 Mexico/Canada",
-                          ifelse(grepl("Vietnam|Indonesia|Korea", trump_events$event_name, ignore.case = TRUE), "🤝 Bilateral Deal",
-                          ifelse(grepl("Steel|Alum|Auto", trump_events$event_name, ignore.case = TRUE), "🏭 Sectoral",
-                          ifelse(grepl("Brazil|India", trump_events$event_name, ignore.case = TRUE), "⚠️ Sanctions",
-                          ifelse(grepl("Global", trump_events$event_name, ignore.case = TRUE), "🌐 Global",
-                          "📋 Other"))))))
+    ifelse(grepl("Mexico|Canada", trump_events$event_name, ignore.case = TRUE), "🌎 Mexico/Canada",
+        ifelse(grepl("Vietnam|Indonesia|Korea", trump_events$event_name, ignore.case = TRUE), "🤝 Bilateral Deal",
+            ifelse(grepl("Steel|Alum|Auto", trump_events$event_name, ignore.case = TRUE), "🏭 Sectoral",
+                ifelse(grepl("Brazil|India", trump_events$event_name, ignore.case = TRUE), "⚠️ Sanctions",
+                    ifelse(grepl("Global", trump_events$event_name, ignore.case = TRUE), "🌐 Global",
+                        "📋 Other"
+                    )
+                )
+            )
+        )
+    )
+)
 
 # Create output directory
 output_dir <- file.path("..", "output", "interactive")
@@ -42,24 +53,24 @@ html_content <- '<!DOCTYPE html>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: "Inter", sans-serif; 
+        body {
+            font-family: "Inter", sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             padding: 2rem;
             min-height: 100vh;
         }
         .container { max-width: 1200px; margin: 0 auto; }
-        h1 { 
-            text-align: center; 
-            color: white; 
-            font-size: 2.5rem; 
+        h1 {
+            text-align: center;
+            color: white;
+            font-size: 2.5rem;
             margin-bottom: 0.5rem;
             text-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
-        .subtitle { 
-            text-align: center; 
-            color: rgba(255,255,255,0.9); 
-            font-size: 1.1rem; 
+        .subtitle {
+            text-align: center;
+            color: rgba(255,255,255,0.9);
+            font-size: 1.1rem;
             margin-bottom: 2rem;
         }
         .stats {
@@ -85,7 +96,7 @@ html_content <- '<!DOCTYPE html>
             font-size: 0.9rem;
             margin-top: 0.25rem;
         }
-        .event-card { 
+        .event-card {
             background: white;
             border-radius: 16px;
             padding: 1.5rem;
@@ -104,7 +115,7 @@ html_content <- '<!DOCTYPE html>
         .event-card.sectoral { border-left-color: #9b59b6; }
         .event-card.deal { border-left-color: #27ae60; }
         .event-card.sanctions { border-left-color: #c0392b; }
-        
+
         .event-header {
             display: flex;
             justify-content: space-between;
@@ -151,7 +162,7 @@ html_content <- '<!DOCTYPE html>
     <div class="container">
         <h1>🎯 Trump Administration Tariff Events Timeline</h1>
         <p class="subtitle">February 2025 - August 2025 | Complete Policy Chronology</p>
-        
+
         <div class="stats">
             <div class="stats-grid">
                 <div class="stat-item">
@@ -172,24 +183,32 @@ html_content <- '<!DOCTYPE html>
                 </div>
             </div>
         </div>
-        
+
         <div class="timeline">
 '
 
 # Add event cards
 for (i in seq_len(nrow(trump_events))) {
-  event <- trump_events[i,]
-  
-  # Determine card class
-  card_class <- if (grepl("China", event$category)) "china"
-                else if (grepl("Mexico", event$category)) "mexico"
-                else if (grepl("Global", event$category)) "global"
-                else if (grepl("Sectoral", event$category)) "sectoral"
-                else if (grepl("Bilateral", event$category)) "deal"
-                else if (grepl("Sanctions", event$category)) "sanctions"
-                else "default"
-  
-  html_content <- paste0(html_content, sprintf('
+    event <- trump_events[i, ]
+
+    # Determine card class
+    card_class <- if (grepl("China", event$category)) {
+        "china"
+    } else if (grepl("Mexico", event$category)) {
+        "mexico"
+    } else if (grepl("Global", event$category)) {
+        "global"
+    } else if (grepl("Sectoral", event$category)) {
+        "sectoral"
+    } else if (grepl("Bilateral", event$category)) {
+        "deal"
+    } else if (grepl("Sanctions", event$category)) {
+        "sanctions"
+    } else {
+        "default"
+    }
+
+    html_content <- paste0(html_content, sprintf('
             <div class="event-card %s">
                 <div class="event-header">
                     <div class="event-title">%s</div>
@@ -204,12 +223,12 @@ for (i in seq_len(nrow(trump_events))) {
 ', card_class, event$event_name, event$formatted_date, event$category, event$event_type, event$description))
 }
 
-html_content <- paste0(html_content, '
+html_content <- paste0(html_content, "
         </div>
     </div>
 </body>
 </html>
-')
+")
 
 # Write file
 writeLines(html_content, output_file)

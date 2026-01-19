@@ -119,12 +119,18 @@ create_description_panel <- function(title, what_it_shows, how_to_use, key_insig
 
 # Load prepared data
 message("Loading prepared data...\n")
-monthly_totals <- arrow::read_parquet(here("data", "processed", "monthly_totals.parquet")); message("Loaded monthly_totals")
-monthly_by_hs6 <- arrow::read_parquet(here("data", "processed", "monthly_by_hs6.parquet")); message("Loaded monthly_by_hs6")
-monthly_by_hs10 <- arrow::read_parquet(here("data", "processed", "monthly_by_hs10.parquet")); message("Loaded monthly_by_hs10")
-monthly_by_chapter <- arrow::read_parquet(here("data", "processed", "monthly_by_chapter.parquet")); message("Loaded monthly_by_chapter")
-monthly_by_country <- arrow::read_parquet(here("data", "processed", "monthly_by_country.parquet")); message("Loaded monthly_by_country")
-hs10_lookup <- data.table::fread(here("data", "processed", "hs10_lookup.csv")); message("Loaded hs10_lookup.csv")
+monthly_totals <- arrow::read_parquet(here("data", "processed", "monthly_totals.parquet"))
+message("Loaded monthly_totals")
+monthly_by_hs6 <- arrow::read_parquet(here("data", "processed", "monthly_by_hs6.parquet"))
+message("Loaded monthly_by_hs6")
+monthly_by_hs10 <- arrow::read_parquet(here("data", "processed", "monthly_by_hs10.parquet"))
+message("Loaded monthly_by_hs10")
+monthly_by_chapter <- arrow::read_parquet(here("data", "processed", "monthly_by_chapter.parquet"))
+message("Loaded monthly_by_chapter")
+monthly_by_country <- arrow::read_parquet(here("data", "processed", "monthly_by_country.parquet"))
+message("Loaded monthly_by_country")
+hs10_lookup <- data.table::fread(here("data", "processed", "hs10_lookup.csv"))
+message("Loaded hs10_lookup.csv")
 # Normalize fields for joins
 hs10_dt <- hs10_lookup[, .(
   HTS_Number = as.character(hts10),
@@ -153,14 +159,21 @@ trump_events[, category := fcase(
 )]
 
 message("Converting to data.table...")
-setDT(monthly_totals); message("  setDT monthly_totals")
-setDT(monthly_by_hs6); message("  setDT monthly_by_hs6")
-setDT(monthly_by_hs10); message("  setDT monthly_by_hs10")
-setDT(monthly_by_chapter); message("  setDT monthly_by_chapter")
+setDT(monthly_totals)
+message("  setDT monthly_totals")
+setDT(monthly_by_hs6)
+message("  setDT monthly_by_hs6")
+setDT(monthly_by_hs10)
+message("  setDT monthly_by_hs10")
+setDT(monthly_by_chapter)
+message("  setDT monthly_by_chapter")
 monthly_by_chapter[, chapter := as.integer(chapter)]
-setDT(monthly_by_country); message("  setDT monthly_by_country")
-setDT(trump_events); message("  setDT trump_events")
-setDT(hs10_dt); message("  setDT hs10_dt")
+setDT(monthly_by_country)
+message("  setDT monthly_by_country")
+setDT(trump_events)
+message("  setDT trump_events")
+setDT(hs10_dt)
+message("  setDT hs10_dt")
 
 # ============================================================================
 # EXPLORER 1: MONTHLY IMPORTS WITH TRUMP EVENT MARKERS & FILTERING
@@ -320,7 +333,7 @@ for (i in seq_len(nrow(trump_events))) {
     x0 = d, x1 = d, y0 = 0, y1 = 1,
     line = list(color = event_color, width = 2, dash = "dash")
   )))
-  
+
   # Add annotation with detailed hover text
   hover_text_detailed <- paste0(
     "<b>", event_name_val, "</b><br>",
@@ -329,16 +342,19 @@ for (i in seq_len(nrow(trump_events))) {
     "<b>Category:</b> ", cat_val, "<br>",
     "<b>Details:</b> ", description_val
   )
-  
+
+  # Place labels ABOVE the chart area, staggered upwards
+  y_pos <- 1.02 + ((i - 1) %% 3) * 0.15
+
   event_annotations <- append(event_annotations, list(list(
-    x = d, y = 1, yref = "paper",
+    x = d, y = y_pos, yref = "paper",
     text = paste0("<b>", event_name_val, "</b>"),
     showarrow = FALSE,
     textangle = -90,
-    xanchor = "left",
+    xanchor = "center",
     yanchor = "bottom",
-    font = list(size = 9, color = event_color),
-    opacity = 0.7,
+    font = list(size = 11, color = event_color),
+    opacity = 1,
     hovertext = hover_text_detailed,
     hoverlabel = list(bgcolor = "white", bordercolor = event_color, font = list(size = 12))
   )))
@@ -358,7 +374,7 @@ p1 <- p1_base %>%
     paper_bgcolor = "white",
     hovermode = "x unified",
     height = 700,
-    margin = list(l = 80, r = 80, t = 140, b = 80),
+    margin = list(l = 80, r = 80, t = 220, b = 80),
     shapes = event_shapes,
     annotations = event_annotations,
     updatemenus = list(
@@ -436,7 +452,7 @@ p2 <- plot_ly(monthly_totals, x = ~date, type = "scatter", mode = "lines+markers
     paper_bgcolor = "white",
     hovermode = "x unified",
     height = 650,
-    margin = list(l = 80, r = 80, t = 100, b = 80),
+    margin = list(l = 80, r = 80, t = 220, b = 80),
     legend = list(orientation = "h", y = -0.15, x = 0.5, xanchor = "center"),
     shapes = event_shapes,
     annotations = event_annotations
@@ -535,12 +551,12 @@ top_n_options <- c(5, 10, 15, 20, 25, 30)
 # Create traces for all 30 countries with distinct colors for top partners
 # Use high-contrast distinct colors for better differentiation
 distinct_colors <- c(
-  "#e74c3c", "#3498db", "#2ecc71", "#f39c12", "#9b59b6",  # Top 5 - highly distinct
-  "#1abc9c", "#e67e22", "#34495e", "#c0392b", "#16a085",  # 6-10
-  "#27ae60", "#2980b9", "#8e44ad", "#d35400", "#7f8c8d",  # 11-15
-  "#c0392b", "#2c3e50", "#f1c40f", "#e74c3c", "#95a5a6",  # 16-20
-  "#3498db", "#e67e22", "#1abc9c", "#9b59b6", "#2ecc71",  # 21-25
-  "#f39c12", "#34495e", "#16a085", "#8e44ad", "#d35400"   # 26-30
+  "#e74c3c", "#3498db", "#2ecc71", "#f39c12", "#9b59b6", # Top 5 - highly distinct
+  "#1abc9c", "#e67e22", "#34495e", "#c0392b", "#16a085", # 6-10
+  "#27ae60", "#2980b9", "#8e44ad", "#d35400", "#7f8c8d", # 11-15
+  "#c0392b", "#2c3e50", "#f1c40f", "#e74c3c", "#95a5a6", # 16-20
+  "#3498db", "#e67e22", "#1abc9c", "#9b59b6", "#2ecc71", # 21-25
+  "#f39c12", "#34495e", "#16a085", "#8e44ad", "#d35400" # 26-30
 )
 
 for (i in seq_len(nrow(all_top_countries))) {
@@ -552,7 +568,7 @@ for (i in seq_len(nrow(all_top_countries))) {
       x = data_country$date,
       y = data_country$trade_value_bn,
       name = country,
-      visible = if (i <= 20) TRUE else FALSE,  # Show top 20 by default
+      visible = if (i <= 20) TRUE else FALSE, # Show top 20 by default
       line = list(color = distinct_colors[i], width = 2.5),
       marker = list(color = distinct_colors[i], size = 4),
       hovertemplate = paste0("<b>", country, "</b><br>%{x|%B %Y}: <b>$%{y:.1f}B</b><extra></extra>")
@@ -563,7 +579,7 @@ for (i in seq_len(nrow(all_top_countries))) {
 top_n_buttons <- lapply(top_n_options, function(n) {
   visible_vec <- rep(FALSE, 30)
   visible_vec[1:n] <- TRUE
-  
+
   list(
     method = "update",
     args = list(
@@ -590,14 +606,14 @@ p4 <- p4 %>%
     paper_bgcolor = "white",
     hovermode = "closest",
     height = 750,
-    margin = list(l = 80, r = 160, t = 140, b = 80),
+    margin = list(l = 80, r = 160, t = 220, b = 80),
     legend = list(x = 1.02, y = 1, bgcolor = "rgba(255,255,255,0.9)", bordercolor = colors$grid, borderwidth = 1),
     shapes = event_shapes,
     annotations = event_annotations,
     updatemenus = list(
       list(
         type = "dropdown",
-        active = 3,  # Top 20 is the 4th option (0-indexed = 3)
+        active = 3, # Top 20 is the 4th option (0-indexed = 3)
         x = 0.5, xanchor = "center",
         y = 1.12, yanchor = "top",
         bgcolor = "white",
@@ -665,7 +681,7 @@ p5 <- plot_ly() %>%
     paper_bgcolor = "white",
     hovermode = "closest",
     height = 700,
-    margin = list(l = 80, r = 80, t = 100, b = 80),
+    margin = list(l = 80, r = 80, t = 220, b = 80),
     legend = list(orientation = "v", x = 1.02, y = 1, bgcolor = "rgba(255,255,255,0.9)"),
     shapes = event_shapes,
     annotations = event_annotations
@@ -689,7 +705,7 @@ for (i in seq_len(nrow(top_chapters))) {
 
   p5 <- p5 %>%
     add_trace(
-      x = data_chapter$date, 
+      x = data_chapter$date,
       y = data_chapter$trade_value_bn,
       name = short_chapter_label,
       type = "scatter", mode = "lines",

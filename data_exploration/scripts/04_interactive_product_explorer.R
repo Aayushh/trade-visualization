@@ -295,7 +295,7 @@ table_desc_html <- '
   </div>
 </div>'
 
-table_with_desc <- htmlwidgets::prependContent(as_widget(dt_table), HTML(table_desc_html))
+table_with_desc <- htmlwidgets::appendContent(as_widget(dt_table), HTML(table_desc_html))
 saveWidget(table_with_desc, file.path(out_dir, "07_top_products_table.html"), selfcontained = FALSE)
 message("  ✅ Saved: 07_top_products_table.html\n")
 
@@ -315,7 +315,7 @@ hs10_concentration[, concentration_share := cumulative_trade / max(cumulative_tr
 
 # Calculate Gini coefficient
 n <- nrow(hs10_concentration)
-gini <- 1 - 2 * sum(hs10_concentration$concentration_share) / n
+gini <- abs(1 - 2 * sum(hs10_concentration$concentration_share) / n)
 
 # Create enhanced Lorenz curve
 p3 <- plot_ly() %>%

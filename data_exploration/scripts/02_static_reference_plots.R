@@ -26,8 +26,8 @@ colors <- list(
   accent = "#f59e0b",
   success = "#10b981",
   danger = "#ef4444",
-  text_dark = "#1a1a2e",
-  text_muted = "#6b7280",
+  text_dark = "#000000",
+  text_muted = "#000000",
   bg_light = "#f8fafc",
   grid = "#e2e8f0"
 )
@@ -50,42 +50,43 @@ theme_premium <- function(base_size = 18) {
       plot.title = element_text(
         face = "bold",
         size = rel(3.5),
-        color = colors$text_dark,
+        color = "black",
         margin = margin(b = 18),
         hjust = 0
       ),
       plot.subtitle = element_text(
         size = rel(1.8),
-        color = colors$text_muted,
+        color = "black",
         margin = margin(b = 25),
         hjust = 0
       ),
       plot.caption = element_text(
-        size = rel(0.85),
-        color = colors$text_muted,
+        size = rel(1.0),
+        color = "black",
         hjust = 0,
         margin = margin(t = 15)
       ),
 
       # Axes (make labels and ticks larger)
       axis.title = element_text(
-        size = rel(1.4),
-        color = colors$text_dark,
+        size = rel(1.7),
+        color = "black",
         face = "bold"
       ),
       axis.text = element_text(
-        size = rel(1.25),
-        color = colors$text_muted
+        size = rel(1.5),
+        color = "black",
+        face = "bold"
       ),
-      axis.line = element_line(color = colors$grid, linewidth = 0.5),
+      axis.line = element_line(color = "black", linewidth = 0.8),
 
       # Grid
       panel.grid.major = element_line(color = colors$grid, linewidth = 0.3),
       panel.grid.minor = element_blank(),
 
       # Legend - larger for readability
-      legend.title = element_text(face = "bold", size = rel(1.7)),
-      legend.text = element_text(size = rel(1.4)),
+      legend.title = element_text(face = "bold", size = rel(1.7), color = "black"),
+      legend.text = element_text(size = rel(1.4), color = "black", face = "bold"),
       legend.background = element_rect(fill = "white", color = NA),
       legend.key = element_rect(fill = "transparent"),
       legend.key.size = unit(1.8, "lines"),
@@ -139,12 +140,15 @@ message("Generating Plot 1: Monthly US Imports (Enhanced)...\n")
 monthly_totals[, trade_value_bn := trade_value / 1e9]
 
 # Create event lines data (select major events for clarity)
-major_events <- trump_events[!grepl("Deal|Agreement", event_type)][1:8]  # First 8 major tariff changes
+major_events <- trump_events[!grepl("Deal|Agreement", event_type)][1:8] # First 8 major tariff changes
 
 # Calculate statistics for annotation
 avg_imports <- mean(monthly_totals$trade_value_bn, na.rm = TRUE)
 max_imports <- max(monthly_totals$trade_value_bn, na.rm = TRUE)
 max_date <- monthly_totals$date[which.max(monthly_totals$trade_value_bn)]
+
+# Stagger labels to avoid overlap
+major_events[, y_pos := max_imports * rep(c(0.98, 0.90, 0.82), length.out = .N)]
 
 p1 <- ggplot(monthly_totals, aes(x = date, y = trade_value_bn)) +
   # Shaded area under curve
@@ -157,8 +161,8 @@ p1 <- ggplot(monthly_totals, aes(x = date, y = trade_value_bn)) +
   # Event labels with improved readability
   geom_text(
     data = major_events,
-    aes(x = date, y = max_imports * 0.93, label = substr(event_name, 1, 16), color = category),
-    angle = 90, hjust = 1, vjust = 0.2, size = 3.2, fontface = "bold", alpha = 0.85
+    aes(x = date, y = y_pos, label = substr(event_name, 1, 16), color = category),
+    angle = 90, hjust = 1, vjust = 0.2, size = 7, fontface = "bold", alpha = 1
   ) +
   scale_linetype_manual(
     values = c(
@@ -174,7 +178,7 @@ p1 <- ggplot(monthly_totals, aes(x = date, y = trade_value_bn)) +
   # Average line
   geom_hline(
     yintercept = avg_imports, linetype = "dotted",
-    color = colors$text_muted, linewidth = 0.5
+    color = "black", linewidth = 0.8
   ) +
   # Main line chart with gradient effect (approximated with multiple layers)
   geom_line(color = colors$primary, linewidth = 1.5, lineend = "round") +
@@ -183,7 +187,7 @@ p1 <- ggplot(monthly_totals, aes(x = date, y = trade_value_bn)) +
   annotate("text",
     x = min(monthly_totals$date) + 30, y = avg_imports + 2,
     label = paste0("Average: $", round(avg_imports, 1), "B"),
-    hjust = 0, size = 3, color = colors$text_muted, fontface = "italic"
+    hjust = 0, size = 9, color = "black", fontface = "bold.italic"
   ) +
   # Labels and scales
   scale_y_continuous(
@@ -205,7 +209,7 @@ p1 <- ggplot(monthly_totals, aes(x = date, y = trade_value_bn)) +
   ) +
   theme_premium() +
   theme(
-    axis.text.x = element_text(angle = 0, hjust = 0.5, size = rel(0.8)),
+    axis.text.x = element_text(angle = 0, hjust = 0.5, size = rel(1.0), face = "bold", color = "black"),
     legend.position = "bottom",
     legend.direction = "horizontal",
     legend.box = "horizontal"
@@ -248,7 +252,7 @@ p2 <- ggplot(top30_chapters, aes(x = trade_bn, y = chapter_label, fill = avg_tar
   geom_col(width = 0.8) +
   # Add value labels
   geom_text(aes(label = paste0("$", round(trade_bn, 1), "B")),
-    hjust = -0.1, size = 2.8, color = colors$text_muted
+    hjust = -0.1, size = 9, color = "black", fontface = "bold"
   ) +
   scale_fill_gradientn(
     colors = c("#667eea", "#8b5cf6", "#ec4899", "#ef4444"),
@@ -258,7 +262,7 @@ p2 <- ggplot(top30_chapters, aes(x = trade_bn, y = chapter_label, fill = avg_tar
   scale_x_continuous(
     labels = dollar_format(prefix = "$", suffix = "B"),
     breaks = pretty_breaks(n = 5),
-    expand = expansion(mult = c(0, 0.15))
+    expand = expansion(mult = c(0, 0.25))
   ) +
   labs(
     title = "Top 30 HS Chapters by Total Import Value",
@@ -269,7 +273,7 @@ p2 <- ggplot(top30_chapters, aes(x = trade_bn, y = chapter_label, fill = avg_tar
   ) +
   theme_premium() +
   theme(
-    axis.text.y = element_text(size = rel(0.8)),
+    axis.text.y = element_text(size = rel(1.2), face = "bold", color = "black"),
     legend.position = "right",
     panel.grid.major.y = element_blank()
   )
@@ -303,13 +307,13 @@ p3 <- ggplot(top30_countries, aes(x = trade_bn, y = Country)) +
   geom_col(aes(fill = avg_tariff_pct), width = 0.8) +
   # Add value labels
   geom_text(aes(label = paste0("$", round(trade_bn, 1), "B")),
-    hjust = -0.1, size = 2.8, color = colors$text_muted
+    hjust = -0.1, size = 9, color = "black", fontface = "bold"
   ) +
   # Highlight high-tariff countries with a symbol
   geom_point(
     data = top30_countries[avg_tariff_pct >= high_tariff_cutoff],
     aes(x = trade_bn + max(trade_bn) * 0.12),
-    shape = "★", size = 3, color = colors$danger
+    shape = "★", size = 4, color = colors$danger
   ) +
   scale_fill_gradientn(
     colors = c("#10b981", "#22d3ee", "#8b5cf6", "#ef4444"),
@@ -319,7 +323,7 @@ p3 <- ggplot(top30_countries, aes(x = trade_bn, y = Country)) +
   scale_x_continuous(
     labels = dollar_format(prefix = "$", suffix = "B"),
     breaks = pretty_breaks(n = 5),
-    expand = expansion(mult = c(0, 0.18))
+    expand = expansion(mult = c(0, 0.25))
   ) +
   labs(
     title = "Top 30 Trading Partners by US Import Value",
@@ -330,7 +334,7 @@ p3 <- ggplot(top30_countries, aes(x = trade_bn, y = Country)) +
   ) +
   theme_premium() +
   theme(
-    axis.text.y = element_text(size = rel(0.9)),
+    axis.text.y = element_text(size = rel(1.2), face = "bold", color = "black"),
     legend.position = "right",
     panel.grid.major.y = element_blank()
   )
