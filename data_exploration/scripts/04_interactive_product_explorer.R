@@ -456,12 +456,13 @@ p4 <- plot_ly(
   config(responsive = TRUE, displaylogo = FALSE)
 
 p4_desc <- create_description_panel(
-  title = "Tariff Distribution by Chapter",
-  what_it_shows = "Violin plots showing the distribution of tariff rates across all products within each of the top 15 HS chapters. The <b>width</b> of each violin indicates how many products have tariffs at that level. The <b>box</b> inside shows the interquartile range (25th to 75th percentile). The <b>white line</b> indicates the mean tariff for that chapter.",
-  how_to_use = "<li><b>Compare shapes:</b> Wide violins = high tariff variability; narrow = uniform treatment</li>
-               <li><b>Hover:</b> See exact chapter name and tariff value at any point</li>
-               <li><b>Ordering:</b> Chapters are sorted by median tariff (highest on left)</li>",
-  key_insights = "Some chapters (like textiles and apparel) have consistently high tariffs across all products, shown by narrow violins positioned high. Others (like machinery) have wide violins spanning from 0% to 25%+, indicating varied tariff treatment within the category.",
+  title = "Tariff Distribution by Product Chapter (Violin Plot)",
+  what_it_shows = "This chart shows how tariff rates vary <b>within</b> each HS chapter across different products. Each violin shape uses <b>Kernel Density Estimation (KDE)</b>—a statistical method that smooths individual data points into a continuous distribution curve. The <b>width at any height</b> shows the density (concentration) of products with that tariff rate. A <b>wider section means more products</b> have tariffs in that range. The <b>box plot inside</b> shows quartiles: the middle line is the median, the box spans the 25th to 75th percentiles, and the <b>white line</b> is the mean.",
+  how_to_use = "<li><b>Compare shapes:</b> Wide violins = high tariff variability across products in that chapter; narrow violins = most products face similar tariffs</li>
+               <li><b>Hover:</b> See exact chapter name and tariff rate at any point on the violin</li>
+               <li><b>Ordering:</b> Chapters sorted by median tariff rate (highest first)</li>
+               <li><b>Interpretation:</b> This shows how the SAME PRODUCT CATEGORY (chapter) is treated differently across its individual products (HS10 codes), NOT across countries. Each violin represents variation within a single chapter's products.</li>",
+  key_insights = "Chapters like textiles show narrow, high-positioned violins—meaning nearly all textile products face uniformly high tariffs (6-15%). Machinery chapters show wide violins spanning 0-25%, indicating some machinery enters duty-free while other items face high tariffs. The KDE smoothing reveals these patterns more clearly than raw histograms would.",
   color = colors$accent
 )
 
@@ -529,9 +530,10 @@ p5 <- plot_ly(
     ),
     font = list(family = "Inter, sans-serif"),
     xaxis = list(
-      title = "Total Trade Value (USD)",
+      title = "Total Trade Value (Billions USD)",
       type = "log",
-      tickformat = "$,.0s",
+      tickvals = c(1e8, 1e9, 1e10, 1e11),
+      ticktext = c("$0.1B", "$1B", "$10B", "$100B"),
       gridcolor = colors$grid
     ),
     yaxis = list(

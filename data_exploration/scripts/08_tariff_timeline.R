@@ -17,15 +17,24 @@ trump_events <- fread(events_path)
 trump_events$date <- dmy(trump_events$date)
 setorder(trump_events, date)
 
+# Add category based on event_type and description
+trump_events$category <- ifelse(grepl("China", trump_events$event_name, ignore.case = TRUE), "China",
+                          ifelse(grepl("Mexico|Canada", trump_events$event_name, ignore.case = TRUE), "Mexico/Canada",
+                          ifelse(grepl("Vietnam|Indonesia|Korea", trump_events$event_name, ignore.case = TRUE), "Negotiation",
+                          ifelse(grepl("Steel|Alum|Auto", trump_events$event_name, ignore.case = TRUE), "Sectoral",
+                          ifelse(grepl("Brazil|India", trump_events$event_name, ignore.case = TRUE), "Sanctions",
+                          ifelse(grepl("Global", trump_events$event_name, ignore.case = TRUE), "Global",
+                          "Other"))))))
+
 # Define category colors
 event_colors <- c(
   "China" = "#e74c3c",
   "Mexico/Canada" = "#f39c12",
-  "EU" = "#3498db",
+  "Global" = "#3498db",
   "Sectoral" = "#9b59b6",
-  "Retaliation" = "#c0392b",
   "Negotiation" = "#27ae60",
-  "Sanctions" = "#34495e"
+  "Sanctions" = "#c0392b",
+  "Other" = "#95a5a6"
 )
 
 # Assign y-positions alternating to prevent overlap

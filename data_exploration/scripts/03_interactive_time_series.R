@@ -532,8 +532,16 @@ p4 <- plot_ly(type = "scatter", mode = "lines")
 # Define selectable top N options
 top_n_options <- c(5, 10, 15, 20, 25, 30)
 
-# Create traces for all 30 countries
-country_colors <- viridisLite::viridis(30)
+# Create traces for all 30 countries with distinct colors for top partners
+# Use high-contrast distinct colors for better differentiation
+distinct_colors <- c(
+  "#e74c3c", "#3498db", "#2ecc71", "#f39c12", "#9b59b6",  # Top 5 - highly distinct
+  "#1abc9c", "#e67e22", "#34495e", "#c0392b", "#16a085",  # 6-10
+  "#27ae60", "#2980b9", "#8e44ad", "#d35400", "#7f8c8d",  # 11-15
+  "#c0392b", "#2c3e50", "#f1c40f", "#e74c3c", "#95a5a6",  # 16-20
+  "#3498db", "#e67e22", "#1abc9c", "#9b59b6", "#2ecc71",  # 21-25
+  "#f39c12", "#34495e", "#16a085", "#8e44ad", "#d35400"   # 26-30
+)
 
 for (i in seq_len(nrow(all_top_countries))) {
   country <- all_top_countries$Country[i]
@@ -545,8 +553,8 @@ for (i in seq_len(nrow(all_top_countries))) {
       y = data_country$trade_value_bn,
       name = country,
       visible = if (i <= 20) TRUE else FALSE,  # Show top 20 by default
-      line = list(color = country_colors[i], width = 2.5),
-      marker = list(color = country_colors[i], size = 4),
+      line = list(color = distinct_colors[i], width = 2.5),
+      marker = list(color = distinct_colors[i], size = 4),
       hovertemplate = paste0("<b>", country, "</b><br>%{x|%B %Y}: <b>$%{y:.1f}B</b><extra></extra>")
     )
 }
@@ -675,16 +683,21 @@ for (i in seq_len(nrow(top_chapters))) {
   chapter_name <- top_chapters_named$chapter_name[i]
   data_chapter <- chapter_ts[chapter == chapter_code][order(date)]
 
+  # Full chapter name for hover
+  full_chapter_label <- paste0("Chapter ", chapter_code, ": ", chapter_name)
+  short_chapter_label <- paste0(chapter_code, ": ", substr(chapter_name, 1, 30))
+
   p5 <- p5 %>%
     add_trace(
-      x = data_chapter$date, y = data_chapter$trade_value_bn,
-      name = paste0(chapter_code, ": ", substr(chapter_name, 1, 30)),
+      x = data_chapter$date, 
+      y = data_chapter$trade_value_bn,
+      name = short_chapter_label,
       type = "scatter", mode = "lines",
       stackgroup = "one", groupnorm = "percent",
       fillcolor = paste0(colors_palette[i], "CC"),
       line = list(color = colors_palette[i], width = 0.5),
-      customdata = data_chapter$trade_value_bn,
-      hovertemplate = "<b>%{fullData.name}</b><br>Share: %{y:.1%}<br>Value: $%{customdata:.1f}B<extra></extra>",
+      customdata = matrix(c(data_chapter$trade_value_bn, rep(full_chapter_label, nrow(data_chapter))), ncol = 2),
+      hovertemplate = "<b>%{customdata[1]}</b><br>%{x|%B %Y}<br>Trade Value: <b>$%{customdata[0]:.2f}B</b><br>Market Share: <b>%{y:.1f}%</b><extra></extra>",
       legendgroup = chapter_code
     )
 }
