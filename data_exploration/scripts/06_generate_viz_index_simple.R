@@ -15,22 +15,22 @@ viz_cards <- list(
     list(
         id = "static-1", category = "static", num = "S1", icon = "📊", title = "Monthly US Imports",
         subtitle = "Time Series with Event Markers",
-        description = "Publication-ready time series showing total US imports from January 2024 to August 2025. Vertical dashed lines mark major Trump-era tariff implementation dates.",
-        insights = "Import values show seasonal patterns with notable disruptions following major tariff announcements.",
+        description = "This publication-ready time series displays total US import values from January 2024 to September 2025, tracking the aggregate flow of goods into the United States. Vertical dashed lines mark 14 major Trump administration tariff implementation events, providing temporal context for trade fluctuations. The chart reveals seasonal import patterns overlaid with policy-driven disruptions, showing how trade volumes respond to tariff announcements and implementations.",
+        insights = "Import values exhibit clear seasonal patterns with notable disruptions following major tariff announcements. Watch for pre-tariff import surges as businesses anticipate higher costs, followed by post-implementation corrections.",
         chart_type = "Time Series", link = "./static/monthly_imports.png", link_type = "image"
     ),
     list(
         id = "static-2", category = "static", num = "S2", icon = "📊", title = "Top 30 HS Chapters",
         subtitle = "Trade Volume by Category",
-        description = "Horizontal bar chart ranking the top 30 HS chapters by total import value. Bar colors indicate average tariff rate.",
-        insights = "Electronics (Chapter 85) and machinery (Chapter 84) dominate US imports by value.",
+        description = "This horizontal bar chart ranks the top 30 Harmonized System (HS) chapters by total import value across the entire analysis period. Each bar is color-coded by average tariff rate, revealing which product categories face the highest duties. HS chapters represent broad product categories (e.g., Chapter 85 = Electrical Machinery, Chapter 84 = Mechanical Machinery), providing a sector-level view of US trade composition.",
+        insights = "Electronics (Chapter 85) and machinery (Chapter 84) dominate US imports by value, together accounting for over 30% of total trade. Notice how capital goods and intermediate inputs make up the majority of high-value imports, reflecting US manufacturing's reliance on global supply chains.",
         chart_type = "Bar Chart", link = "./static/top_chapters.png", link_type = "image"
     ),
     list(
         id = "static-3", category = "static", num = "S3", icon = "📊", title = "Top 30 Countries",
         subtitle = "Trade Partners by Value",
-        description = "Horizontal bar chart of the 30 largest US import partners by total trade value.",
-        insights = "China remains the largest source of US imports despite elevated tariff rates.",
+        description = "This horizontal bar chart identifies the 30 largest US import partners ranked by total trade value from January 2024 to September 2025. The visualization shows both traditional allies (Canada, Mexico) and strategic competitors (China), highlighting the geographic distribution of US supply chains. Bar lengths represent cumulative import values, while colors can indicate regional groupings or tariff treatment categories.",
+        insights = "China remains the largest source of US imports despite elevated tariff rates, demonstrating the difficulty of rapidly reshoring complex supply chains. Mexico and Canada follow closely, benefiting from USMCA preferential treatment and geographic proximity.",
         chart_type = "Bar Chart", link = "./static/top_countries.png", link_type = "image"
     ),
 
@@ -38,43 +38,43 @@ viz_cards <- list(
     list(
         id = "ts-1", category = "timeseries", num = "01", icon = "📈", title = "Monthly Imports Interactive",
         subtitle = "With Event Markers and Filtering",
-        description = "Interactive exploration of monthly US imports with dropdown to filter by country or HS chapter.",
-        insights = "Toggle between aggregate view and individual country/chapter trends to identify patterns.",
+        description = "This fully interactive time series explorer allows users to filter monthly import data by individual countries or HS chapters, revealing granular trends hidden in aggregate statistics. The dropdown menu provides access to detailed trajectories for each trading partner and product category. Tariff event markers remain visible across all views, enabling direct comparison of policy timing against trade responses. The chart updates dynamically, showing how specific sectors or countries reacted to tariff implementations.",
+        insights = "Toggle between aggregate view and individual country/chapter trends to identify divergent patterns. For example, compare China's sharp post-tariff decline against Vietnam's simultaneous growth to observe trade diversion effects in real-time.",
         chart_type = "Interactive Line Chart", link = "01_monthly_imports_interactive.html", link_type = "html"
     ),
     list(
         id = "ts-2", category = "timeseries", num = "02", icon = "📈", title = "Tariff Rate Evolution",
         subtitle = "4-Rate Decomposition",
-        description = "Four tariff rate metrics tracked over time: Overall rate, Dutiable rate, Section 61 (China), and Section 69 (Steel/Aluminum).",
-        insights = "Section 61 and 69 rates show step increases aligned with tariff implementation dates.",
+        description = "This multi-line chart tracks four distinct tariff metrics over time, providing a comprehensive view of US tariff policy evolution: (1) Overall Calculated Rate = total duties paid divided by total customs value, (2) Dutiable Rate = duties paid divided only by dutiable imports (excluding free goods), (3) Section 61 Rate = China-specific duties under Section 301, and (4) Section 69 Rate = Steel/Aluminum duties under Section 232. Each metric reveals different aspects of tariff policy, from economy-wide effects to targeted actions.",
+        insights = "Section 61 (China) and Section 69 (Steel/Aluminum) rates show dramatic step increases aligned with tariff implementation dates, often reaching 25% or higher. The overall rate rises more gradually, reflecting the mix of targeted and general duties across the full import base.",
         chart_type = "Line Chart", link = "02_tariff_evolution_interactive.html", link_type = "html"
     ),
     list(
         id = "ts-3", category = "timeseries", num = "03", icon = "📈", title = "Trade vs Tariff Scatter",
         subtitle = "Bubble Size = Tariffs Paid",
-        description = "Monthly scatter plot with trade value on X-axis and tariff rate on Y-axis.",
-        insights = "Larger bubbles indicate months with higher tariff revenue collection.",
+        description = "This bubble chart plots monthly observations with total trade value on the X-axis and average tariff rate on the Y-axis. Bubble size represents total tariff revenue collected each month, creating a three-dimensional view of trade policy impact. The visualization reveals the relationship between trade volumes, tariff rates, and government revenue - critical for understanding the fiscal and economic implications of tariff policy. Hover over each bubble to see exact values and dates.",
+        insights = "Larger bubbles indicate months with higher tariff revenue collection, often appearing after major tariff rate increases. Watch for the trade-off between tariff rates and trade volumes: higher rates may reduce import quantities, potentially offsetting revenue gains.",
         chart_type = "Bubble Chart", link = "03_trade_vs_tariff_scatter.html", link_type = "html"
     ),
     list(
         id = "ts-4", category = "timeseries", num = "04", icon = "📈", title = "Countries Evolution",
         subtitle = "Top 20 Partners Over Time",
-        description = "Line chart showing monthly import values for the top 20 trading partners.",
-        insights = "Watch how China's import share changes relative to other major partners.",
+        description = "This multi-line chart displays monthly import values for the 20 largest US trading partners, each represented by a distinct color. The visualization makes it easy to compare trade trajectories across countries, identifying winners and losers from tariff policy changes. Lines are drawn with transparency to reduce overplotting while maintaining visibility of all trends. Hover over any line to highlight that country and see detailed monthly values.",
+        insights = "Watch how China's import share changes relative to other major partners like Mexico, Canada, Vietnam, and India. Trade diversion effects become visible as some countries gain market share while others lose ground following tariff implementations.",
         chart_type = "Multi-Line Chart", link = "04_countries_evolution.html", link_type = "html"
     ),
     list(
         id = "ts-5", category = "timeseries", num = "05", icon = "📈", title = "HS Chapters Stacked Area",
         subtitle = "Market Share Over Time",
-        description = "Stacked area chart showing the composition of US imports by HS chapter over time.",
-        insights = "Market share shifts reveal which sectors gained or lost ground during the tariff period.",
+        description = "This stacked area chart shows the composition of US imports by HS chapter over the full analysis period, with each colored band representing a different product category. The chart reveals how market share shifts between sectors over time, highlighting structural changes in US import composition. Total area height represents aggregate import value, while individual band thickness shows each chapter's contribution. Use the chapter dropdown to filter and focus on specific sectors of interest.",
+        insights = "Market share shifts reveal which sectors gained or lost ground during the tariff period. For example, electronics and machinery may maintain dominance while traditional manufacturing inputs fluctuate with tariff-driven supply chain adjustments.",
         chart_type = "Stacked Area", link = "05_chapters_stacked_area.html", link_type = "html"
     ),
     list(
         id = "ts-6", category = "timeseries", num = "18", icon = "📈", title = "Tariff Events Timeline",
         subtitle = "Interactive Policy Timeline",
-        description = "Interactive timeline showing all 14 major Trump administration tariff events from February to May 2025.",
-        insights = "Explore the chronological progression of tariff policy changes with detailed event information.",
+        description = "This interactive card-based timeline presents all 14 major Trump administration tariff events from February to May 2025 in chronological order. Each event is displayed as a styled card with emoji icons categorizing the policy type (China, retaliatory, sectoral, etc.), full event descriptions, implementation dates, and affected products. The timeline provides essential context for interpreting trade data fluctuations and helps users understand the rapid-fire sequence of tariff announcements during this period.",
+        insights = "Explore the chronological progression of tariff policy changes with detailed event information. Notice how events cluster in early 2025, creating overlapping policy shocks that make it difficult to isolate individual effects on trade flows.",
         chart_type = "Interactive Timeline", link = "18_tariff_timeline.html", link_type = "html"
     ),
 
@@ -82,36 +82,36 @@ viz_cards <- list(
     list(
         id = "prod-1", category = "products", num = "06", icon = "📦", title = "Trade-Tariff Scatter",
         subtitle = "500 Products by Volume and Rate",
-        description = "Interactive scatter plot of the top 500 HS10 products. X-axis: cumulative trade value. Y-axis: average tariff rate. Color: HS chapter.",
-        insights = "Identify high-value products with unusual tariff rates by exploring outliers.",
+        description = "This interactive scatter plot visualizes the top 500 HS10 products (10-digit codes representing highly specific product categories) positioned by cumulative trade value (X-axis) and average tariff rate (Y-axis). Each point is color-coded by HS chapter, allowing users to see which product categories cluster together in tariff-trade space. The visualization reveals outliers: high-value products with unusual tariff rates that merit closer investigation. Hover over any point to see the full product description, tariff rate, and total trade value.",
+        insights = "Identify high-value products with unusual tariff rates by exploring outliers in the upper-right and upper-left quadrants. Products in the upper-right face both high tariffs and high trade volumes, representing significant revenue sources and potential supply chain vulnerabilities.",
         chart_type = "Scatter Plot", link = "06_trade_tariff_scatter.html", link_type = "html"
     ),
     list(
         id = "prod-2", category = "products", num = "07", icon = "📦", title = "Top Products Table",
         subtitle = "Searchable HS10 Details",
-        description = "Interactive data table of the top 500 HS10 products with full descriptions, trade values, and tariff rates.",
-        insights = "Use the search box to find specific products.",
+        description = "This fully interactive data table presents the top 500 HS10 products with complete details including 10-digit HS codes, full product descriptions, total trade values, average tariff rates, and associated HS chapters. The table supports sorting by any column, pagination for easy browsing, and a powerful search function that filters across all fields. Export options allow users to download filtered data for further analysis. This tool serves as both a reference for specific product lookups and an exploratory interface for discovering high-value or high-tariff products.",
+        insights = "Use the search box to find specific products by keyword, HS code, or chapter name. For example, search 'semiconductor' to find all chip-related products and their tariff treatment, or sort by tariff rate to identify the most heavily taxed imports.",
         chart_type = "Data Table", link = "07_top_products_table.html", link_type = "html"
     ),
     list(
         id = "prod-3", category = "products", num = "08", icon = "📦", title = "Trade Concentration Lorenz",
         subtitle = "Gini Coefficient Analysis",
-        description = "Lorenz curve showing the concentration of US trade value across products.",
-        insights = "A steep curve indicates high concentration - few products account for most trade.",
+        description = "This Lorenz curve plots the cumulative share of trade value against the cumulative share of products, providing a classic inequality measure adapted to trade analysis. The diagonal line represents perfect equality (every product has identical trade value), while the curved line shows actual concentration. The area between the curves yields the Gini coefficient (displayed on the chart), quantifying trade concentration: values near 0 indicate even distribution across products, while values near 1 indicate extreme concentration in a few products.",
+        insights = "A steep Lorenz curve indicates high trade concentration, meaning a small number of products account for most US imports. This reveals supply chain vulnerabilities: disruptions to a handful of products could have outsized economic impacts.",
         chart_type = "Lorenz Curve", link = "08_concentration_lorenz.html", link_type = "html"
     ),
     list(
         id = "prod-4", category = "products", num = "09", icon = "📦", title = "Tariff Distribution Violin",
         subtitle = "By HS Chapter",
-        description = "Violin plots showing the distribution of tariff rates within each major HS chapter.",
-        insights = "Wide violins indicate high tariff variability within a chapter.",
+        description = "This violin plot displays the full distribution of tariff rates within each major HS chapter, going beyond simple averages to show the spread and density of rates. Each violin's width represents the density of products at that tariff rate (estimated using Kernel Density Estimation), revealing multimodal distributions where chapters contain distinct tariff clusters. Wide violins indicate high variability within a chapter, while narrow violins suggest uniform tariff treatment. Box plot elements inside each violin show median, quartiles, and outliers.",
+        insights = "Wide violins indicate high tariff variability within a chapter, suggesting that policymakers apply different rates to subcategories within the same sector. Narrow violins suggest uniform treatment, while bimodal violins reveal distinct product groups with very different tariff rates.",
         chart_type = "Violin Plot", link = "09_tariff_distribution_violin.html", link_type = "html"
     ),
     list(
         id = "prod-5", category = "products", num = "14", icon = "📦", title = "HS10 Product Treemap",
         subtitle = "200 Products Hierarchical View",
-        description = "Treemap visualization of the top 200 HS10 products, nested by HS chapter.",
-        insights = "Explore the hierarchical structure of trade by clicking into chapters.",
+        description = "This interactive treemap visualizes the top 200 HS10 products organized hierarchically by HS chapter. Each rectangle's size represents total trade value, while colors distinguish HS chapters. The hierarchical layout reveals the nested structure of trade: chapters contain multiple products, with rectangle sizes showing each product's contribution to chapter totals. Click on any chapter to zoom in and see its constituent products in detail, then click the chapter label again to zoom back out to the full view.",
+        insights = "Explore the hierarchical structure of trade by clicking into chapters to see which specific products dominate each category. Large rectangles within a chapter represent key products that drive that sector's total import value.",
         chart_type = "Treemap", link = "14_hs10_treemap.html", link_type = "html"
     ),
 
@@ -119,29 +119,29 @@ viz_cards <- list(
     list(
         id = "geo-1", category = "geographic", num = "10", icon = "🌍", title = "Country Dashboard",
         subtitle = "Trade Partner Overview",
-        description = "Bubble chart of top 30 trading partners. X-axis: sea distance from US. Y-axis: average tariff rate. Bubble size: total trade value.",
-        insights = "Explore whether distance correlates with tariff treatment or trade volume.",
+        description = "This bubble chart visualizes the top 30 US trading partners positioned by sea distance from major US ports (X-axis) and average tariff rate (Y-axis), with bubble size representing total trade value over the analysis period. The visualization tests whether geographic proximity influences tariff treatment or trade volumes, revealing potential patterns in trade policy. Hover over each bubble to see country names, exact distances, tariff rates, and trade values. The chart combines three dimensions of trade relationships in a single interactive view.",
+        insights = "Explore whether distance correlates with tariff treatment or trade volume. For example, do nearby countries like Mexico and Canada face lower tariffs? Do distant suppliers like China face higher rates despite large trade volumes? The chart reveals these geographic patterns at a glance.",
         chart_type = "Bubble Chart", link = "10_country_dashboard.html", link_type = "html"
     ),
     list(
         id = "geo-2", category = "geographic", num = "11", icon = "🌍", title = "Distance Effect Analysis",
         subtitle = "Near vs Far Countries",
-        description = "Box plots comparing tariff rates for near vs. far trading partners.",
-        insights = "Test whether geographic proximity affects tariff treatment.",
+        description = "This box plot comparison tests the hypothesis that geographic proximity affects tariff treatment by dividing trading partners into 'near' and 'far' categories (using median distance as the cutoff) and comparing their tariff rate distributions. Each box shows the median, quartiles, and outliers for its group. The visualization provides statistical evidence for or against distance-based tariff discrimination, a key question in international trade policy analysis.",
+        insights = "Test whether geographic proximity affects tariff treatment. If near countries show significantly lower median tariff rates, it suggests preferential treatment for regional partners (possibly due to trade agreements like USMCA). Similar distributions would indicate distance-neutral tariff policy.",
         chart_type = "Box Plot", link = "11_distance_effect.html", link_type = "html"
     ),
     list(
         id = "geo-3", category = "geographic", num = "12", icon = "🌍", title = "Countries Heatmap",
         subtitle = "Monthly Trade Patterns",
-        description = "Heatmap showing monthly import values for the top 20 countries.",
-        insights = "Visual patterns reveal whether trade disruptions affected multiple countries simultaneously.",
+        description = "This heatmap displays monthly import values for the top 20 countries in a grid format, with countries on the Y-axis, months on the X-axis, and cell colors representing trade value intensity (darker = higher imports). The visualization makes it easy to spot temporal patterns: which months saw elevated imports, whether trade disruptions affected multiple countries simultaneously, and how individual country trajectories compare. Hover over any cell to see exact monthly values and country names.",
+        insights = "Visual patterns reveal whether trade disruptions affected multiple countries simultaneously (vertical bands of lighter colors) or just specific partners. Horizontal patterns show seasonal import cycles for individual countries, while diagonal patterns might indicate rolling supply chain adjustments.",
         chart_type = "Heatmap", link = "12_countries_heatmap.html", link_type = "html"
     ),
     list(
         id = "geo-4", category = "geographic", num = "13", icon = "🌍", title = "Tariff by Country Origin",
         subtitle = "Distribution Histogram",
-        description = "Overlapping histograms showing the distribution of monthly tariff rates for top 15 countries.",
-        insights = "Some countries have consistent tariff rates while others show high variability.",
+        description = "This overlapping histogram shows the distribution of monthly tariff rates for the top 15 trading partners, with each country represented by a semi-transparent colored layer. The visualization reveals whether countries face consistent tariff rates over time (narrow, tall peaks) or highly variable rates (wide, flat distributions). Overlapping allows direct visual comparison of distributions across countries, making it easy to identify which partners face higher average rates or greater volatility.",
+        insights = "Some countries have consistent tariff rates (narrow peaks) while others show high variability (wide spreads). Bimodal distributions indicate countries whose tariff treatment changed dramatically during the analysis period, likely due to policy interventions.",
         chart_type = "Histogram", link = "13_tariff_distribution_by_country.html", link_type = "html"
     ),
 
@@ -149,15 +149,15 @@ viz_cards <- list(
     list(
         id = "anim-1", category = "animations", num = "15", icon = "🎬", title = "Trade-Tariff Animation",
         subtitle = "Top 100 Products Evolution",
-        description = "Animated scatter plot showing how the top 100 products evolve over time. Use Play button or drag slider.",
-        insights = "Watch products accumulate trade volume over time.",
+        description = "This animated scatter plot brings the top 100 HS10 products to life, showing how they accumulate trade value and experience tariff changes over time from January 2024 to September 2025. Each frame represents one month, with products positioned by cumulative trade value (X-axis) and tariff rate (Y-axis). The animation reveals temporal patterns invisible in static charts: which products see tariff spikes, when trade accelerates or decelerates, and how product rankings shift over time. Use the Play button to watch the full sequence, or drag the slider to examine specific months.",
+        insights = "Watch products accumulate trade volume over time, creating upward-sloping trajectories as imports grow. Sudden vertical jumps indicate tariff rate increases for specific products, often aligned with policy announcements. Compare fast-growing products (steep slopes) against slow-growing ones.",
         chart_type = "Animated Scatter", link = "15_trade_tariff_animation.html", link_type = "html"
     ),
     list(
         id = "anim-2", category = "animations", num = "16", icon = "🎬", title = "Country Evolution Animation",
         subtitle = "Top 50 Partners Over Time",
-        description = "Animated bubble chart tracking the top 50 trading partners from January 2024 to present. Features ISO country codes, continent colors, and audio effects.",
-        insights = "Observe how tariff rates spike for specific countries following tariff announcements.",
+        description = "This animated bubble chart tracks the top 50 US trading partners month-by-month from January 2024 through September 2025. Each bubble represents a country, sized by monthly import value and colored by continent. The animation displays 3-letter ISO country codes for identification, with bubbles repositioning as trade values and tariff rates fluctuate. Audio effects mark tariff event dates, providing audio-visual cues for policy timing. The visualization makes temporal patterns vivid: watch China's trajectory diverge from Vietnam's, or see how European partners respond differently than Asian ones.",
+        insights = "Observe how tariff rates spike for specific countries following tariff announcements - watch for sudden upward movements of country bubbles on the Y-axis. China often shows the most dramatic movements, while USMCA partners (Mexico, Canada) remain more stable. Trade diversion becomes visible as some bubbles grow while others shrink simultaneously.",
         chart_type = "Animated Scatter", link = "16_country_evolution_animation.html", link_type = "html"
     ),
 
@@ -165,8 +165,8 @@ viz_cards <- list(
     list(
         id = "tool-1", category = "tools", num = "17", icon = "🔍", title = "HS Code Lookup",
         subtitle = "Interactive Code Search",
-        description = "Search and explore HS 10-digit product codes with full descriptions, chapter names, and section information.",
-        insights = "Use this tool to understand product classifications and find specific HS codes.",
+        description = "This interactive search tool provides instant access to the complete HS 10-digit product classification system used in US trade statistics. Enter any keyword, partial HS code, or product description to search across thousands of product categories. Results display the full 10-digit HS code, complete product description, associated 2-digit HS chapter, chapter name, and broader HS section. The tool serves as both a reference for understanding existing codes and a discovery mechanism for finding relevant products. Essential for interpreting trade data and understanding product categorization.",
+        insights = "Use this tool to understand product classifications and find specific HS codes for analysis. For example, search 'smartphone' to see all related codes and their chapter assignments, or enter '8517' to see all products in the telecommunications chapter. The hierarchical structure (section → chapter → code) becomes clear through exploration.",
         chart_type = "Interactive Tool", link = "17_hs_code_lookup.html", link_type = "html"
     )
 )
@@ -268,14 +268,22 @@ html_content <- '<!DOCTYPE html>
         /* Modal */
         .viz-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10000; }
         .viz-modal.active { display: flex; }
-        .viz-modal .modal-content { width: 95%; height: 95%; margin: auto; background: #1e1e2e; border-radius: 16px; overflow: hidden; }
-        .viz-modal .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 24px; background: #2d2d4a; }
+        .viz-modal .modal-content { width: 95%; height: 95%; margin: auto; background: #1e1e2e; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; }
+        .viz-modal .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 24px; background: #2d2d4a; flex-shrink: 0; }
         .viz-modal .modal-title { font-size: 18px; font-weight: 600; color: white; }
         .viz-modal .close-btn { padding: 10px 20px; background: #ef4444; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; }
         .viz-modal .close-btn:hover { background: #dc2626; }
-        .viz-modal .modal-body { width: 100%; height: calc(100% - 60px); background: white; display: flex; align-items: center; justify-content: center; overflow: auto; }
+        .viz-modal .modal-body { width: 100%; flex: 1; background: white; display: flex; align-items: center; justify-content: center; overflow: auto; min-height: 0; }
         .viz-modal iframe { width: 100%; height: 100%; border: none; }
         .viz-modal img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .viz-modal .modal-description { background: #f8f9fa; border-top: 2px solid #667eea; padding: 1.5rem 2rem; max-height: 200px; overflow-y: auto; flex-shrink: 0; }
+        .viz-modal .modal-description h4 { margin: 0 0 0.75rem 0; color: #1a1a2e; font-size: 1rem; font-weight: 600; }
+        .viz-modal .modal-description p { margin: 0 0 0.75rem 0; color: #4a4a6a; font-size: 0.9rem; line-height: 1.6; }
+        .viz-modal .modal-description p:last-child { margin-bottom: 0; }
+        .viz-modal .modal-description strong { color: #667eea; }
+        .viz-modal .modal-description .insight { background: #ffffff; border-left: 3px solid #10b981; padding: 0.75rem 1rem; margin-top: 0.75rem; border-radius: 4px; }
+        .viz-modal .modal-description .insight strong { color: #10b981; }
+
 
         @media (max-width: 768px) {
             .cards-grid { grid-template-columns: 1fr; }
@@ -324,9 +332,14 @@ html_content <- '<!DOCTYPE html>
 # Generate card HTML for each visualization
 for (viz in viz_cards) {
     is_image <- viz$link_type == "image"
+    # Escape quotes for data attributes and JavaScript
+    desc_escaped <- gsub("'", "&apos;", gsub('"', "&quot;", viz$description))
+    insights_escaped <- gsub("'", "&apos;", gsub('"', "&quot;", viz$insights))
+    title_js <- gsub("'", "\\\\'", viz$title)
+    
     card_html <- sprintf(
         '
-            <div class="card" data-category="%s" data-title="%s" data-description="%s">
+            <div class="card" data-category="%s" data-title="%s" data-description="%s" data-insights="%s">
                 <div class="card-header">%s - #%s</div>
                 <div class="card-thumbnail">%s</div>
                 <div class="card-content">
@@ -338,14 +351,15 @@ for (viz in viz_cards) {
                         <span class="card-badge">%s</span>
                         <div class="card-actions">
                             <button class="copy-link-btn" onclick="copyLink(\'%s\', this); return false;" title="Copy shareable link">📋 Copy Link</button>
-                            <a href="#" class="card-link" onclick="openInModal(\'%s\', \'%s\', %s); return false;">Open</a>
+                            <a href="#" class="card-link" onclick="openInModal(\'%s\', \'%s\', %s, \'%s\', \'%s\'); return false;">Open</a>
                         </div>
                     </div>
                 </div>
             </div>',
         viz$category,
         viz$title,
-        viz$description,
+        desc_escaped,
+        insights_escaped,
         toupper(viz$category),
         viz$num,
         viz$icon,
@@ -356,8 +370,10 @@ for (viz in viz_cards) {
         viz$chart_type,
         viz$link,
         viz$link,
-        gsub("'", "\\\\'", viz$title),
-        tolower(as.character(is_image))
+        title_js,
+        tolower(as.character(is_image)),
+        desc_escaped,
+        insights_escaped
     )
     html_content <- paste0(html_content, card_html)
 }
@@ -385,6 +401,7 @@ html_content <- paste0(html_content, sprintf('
                 <button onclick="closeModal()" class="close-btn">X Close</button>
             </div>
             <div id="modalBody" class="modal-body"></div>
+            <div id="modalDescription" class="modal-description"></div>
         </div>
     </div>
 
@@ -405,16 +422,34 @@ html_content <- paste0(html_content, sprintf('
             });
         }
 
-        function openInModal(url, title, isImage) {
+        function openInModal(url, title, isImage, description, insights) {
             var modal = document.getElementById("vizModal");
             var body = document.getElementById("modalBody");
             var titleEl = document.getElementById("modalTitle");
+            var descEl = document.getElementById("modalDescription");
+            
             titleEl.textContent = title || "Visualization";
+            
             if (isImage) {
                 body.innerHTML = "<img src=\\"" + url + "\\" alt=\\"" + title + "\\">";
             } else {
                 body.innerHTML = "<iframe src=\\"" + url + "\\" allowfullscreen></iframe>";
             }
+            
+            // Build description HTML
+            var descHTML = "";
+            if (description) {
+                // Unescape HTML entities
+                description = description.replace(/&quot;/g, \'"\'). replace(/&apos;/g, "\'");
+                descHTML += "<h4>About This Visualization</h4>";
+                descHTML += "<p>" + description + "</p>";
+            }
+            if (insights) {
+                insights = insights.replace(/&quot;/g, \'"\'). replace(/&apos;/g, "\'");
+                descHTML += "<div class=\'insight\'><p><strong>Key Insight:</strong> " + insights + "</p></div>";
+            }
+            descEl.innerHTML = descHTML;
+            
             modal.classList.add("active");
             document.body.style.overflow = "hidden";
         }
@@ -422,6 +457,7 @@ html_content <- paste0(html_content, sprintf('
         function closeModal() {
             var modal = document.getElementById("vizModal");
             document.getElementById("modalBody").innerHTML = "";
+            document.getElementById("modalDescription").innerHTML = "";
             modal.classList.remove("active");
             document.body.style.overflow = "";
         }
