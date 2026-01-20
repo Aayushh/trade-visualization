@@ -15,7 +15,7 @@ viz_cards <- list(
     list(
         id = "static-1", category = "static", num = "S1", icon = "📊", title = "Monthly US Imports",
         subtitle = "Time Series with Event Markers",
-        description = "This publication-ready time series displays total US import values from January 2024 to September 2025, tracking the aggregate flow of goods into the United States. Vertical dashed lines mark 14 major Trump administration tariff implementation events, providing temporal context for trade fluctuations. The chart reveals seasonal import patterns overlaid with policy-driven disruptions, showing how trade volumes respond to tariff announcements and implementations.",
+        description = "This time series displays total US import values from January 2024 to September 2025, tracking the aggregate flow of goods into the United States. Vertical dashed lines mark 14 major Trump administration tariff implementation events, providing temporal context for trade fluctuations. The chart reveals seasonal import patterns overlaid with policy-driven disruptions, showing how trade volumes respond to tariff announcements and implementations.",
         insights = "Import values exhibit clear seasonal patterns with notable disruptions following major tariff announcements. Watch for pre-tariff import surges as businesses anticipate higher costs, followed by post-implementation corrections.",
         chart_type = "Time Series", link = "./static/monthly_imports.png", link_type = "image"
     ),
@@ -73,7 +73,7 @@ viz_cards <- list(
     list(
         id = "ts-6", category = "timeseries", num = "18", icon = "📈", title = "Tariff Events Timeline",
         subtitle = "Interactive Policy Timeline",
-        description = "This interactive card-based timeline presents all 14 major Trump administration tariff events from February to May 2025 in chronological order. Each event is displayed as a styled card with emoji icons categorizing the policy type (China, retaliatory, sectoral, etc.), full event descriptions, implementation dates, and affected products. The timeline provides essential context for interpreting trade data fluctuations and helps users understand the rapid-fire sequence of tariff announcements during this period.",
+        description = "This interactive card-based timeline presents all 14 major Trump administration tariff events from January to September 2025 in chronological order. Each event is displayed as a styled card with emoji icons categorizing the policy type (China, retaliatory, sectoral, etc.), full event descriptions, implementation dates, and affected products. The timeline provides essential context for interpreting trade data fluctuations and helps users understand the rapid-fire sequence of tariff announcements during this period.",
         insights = "Explore the chronological progression of tariff policy changes with detailed event information. Notice how events cluster in early 2025, creating overlapping policy shocks that make it difficult to isolate individual effects on trade flows.",
         chart_type = "Interactive Timeline", link = "18_tariff_timeline.html", link_type = "html"
     ),
@@ -351,7 +351,7 @@ for (viz in viz_cards) {
                         <span class="card-badge">%s</span>
                         <div class="card-actions">
                             <button class="copy-link-btn" onclick="copyLink(\'%s\', this); return false;" title="Copy shareable link">📋 Copy Link</button>
-                            <a href="#" class="card-link" onclick="openInModal(\'%s\', \'%s\', %s, \'%s\', \'%s\'); return false;">Open</a>
+                            <a href="#" class="card-link" onclick="openInModal(\'%s\', \'%s\', %s, this); return false;">Open</a>
                         </div>
                     </div>
                 </div>
@@ -371,9 +371,7 @@ for (viz in viz_cards) {
         viz$link,
         viz$link,
         title_js,
-        tolower(as.character(is_image)),
-        desc_escaped,
-        insights_escaped
+        tolower(as.character(is_image))
     )
     html_content <- paste0(html_content, card_html)
 }
@@ -422,7 +420,7 @@ html_content <- paste0(html_content, sprintf('
             });
         }
 
-        function openInModal(url, title, isImage, description, insights) {
+        function openInModal(url, title, isImage, linkElement) {
             var modal = document.getElementById("vizModal");
             var body = document.getElementById("modalBody");
             var titleEl = document.getElementById("modalTitle");
@@ -435,6 +433,11 @@ html_content <- paste0(html_content, sprintf('
             } else {
                 body.innerHTML = "<iframe src=\\"" + url + "\\" allowfullscreen></iframe>";
             }
+            
+            // Get description and insights from card data attributes
+            var cardElement = linkElement.closest(".card");
+            var description = cardElement ? cardElement.getAttribute("data-description") : "";
+            var insights = cardElement ? cardElement.getAttribute("data-insights") : "";
             
             // Build description HTML
             var descHTML = "";
