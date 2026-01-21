@@ -88,12 +88,12 @@ p_anim1 <- plot_ly(
     layout(
         title = list(text = "<b>Trade-Tariff Evolution</b>", font = list(family = "Inter", size = 20)),
         xaxis = list(title = "Trade Value ($B)", type = "log"), yaxis = list(title = "Tariff Rate (%)"),
-        showlegend = FALSE, height = 700
+        showlegend = FALSE, height = 700, autosize = TRUE
     ) %>%
     animation_opts(frame = 800, transition = 400, redraw = TRUE) %>%
     animation_slider(currentvalue = list(prefix = "Month: ")) %>%
     animation_button(x = 0.5, y = -0.08, label = "▶ Play") %>%
-    config(displaylogo = FALSE)
+    config(responsive = TRUE, displaylogo = FALSE)
 
 htmlwidgets::saveWidget(p_anim1, file.path(out_dir, "15_trade_tariff_animation.html"), selfcontained = FALSE)
 message("  ✅ Saved: 15_trade_tariff_animation.html\n")
